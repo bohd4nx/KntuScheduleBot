@@ -7,7 +7,7 @@ from aiogram.types import BotCommand
 from aiogram_i18n import I18nMiddleware
 from aiogram_i18n.cores.fluent_runtime_core import FluentRuntimeCore
 
-from bot.commands import start_router, help_router
+from bot.commands import start_router, help_router, schedule_router
 from bot.core import logger, setup_logging, config
 from bot.handlers import menu, schedule
 from bot.middlewares import LocaleMiddleware
@@ -16,6 +16,9 @@ from bot.middlewares import LocaleMiddleware
 async def set_bot_commands(bot: Bot) -> None:
     commands = [
         BotCommand(command="start", description="🏠 Головне меню"),
+        BotCommand(command="today", description="🗓️  Розклад на сьогодні"),
+        BotCommand(command="tomorrow", description="🗓️  Розклад на завтра"),
+        BotCommand(command="week", description="🗓️  Розклад на тиждень"),
         BotCommand(command="help", description="❓ Як користуватися"),
     ]
     await bot.set_my_commands(commands)
@@ -52,7 +55,7 @@ async def main() -> None:
 
     dp = Dispatcher()
 
-    for router in [start_router, help_router, menu.router, schedule.router]:
+    for router in [start_router, help_router, schedule_router, menu.router, schedule.router]:
         dp.include_router(router)
 
     setup_middlewares(dp, i18n)
