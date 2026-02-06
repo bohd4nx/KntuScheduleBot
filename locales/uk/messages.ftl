@@ -28,6 +28,7 @@ schedule-week = <tg-emoji emoji-id="5258105663359294787">🗓️</tg-emoji> <b>�
 
 alert-no-lessons-today = 🎉 Сьогодні пар немає! Відпочивай!
 alert-no-lessons-tomorrow = 🎉 Завтра пар немає! Вихідний!
+alert-semester-not-started = 🙃 Навчання ще не почалось! Відпочиваємо!
 
 lesson-item = <b>{$number}. {$subject}</b> (<code>{$time}</code>)
     {$teachers_count ->

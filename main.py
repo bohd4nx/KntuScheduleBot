@@ -10,7 +10,7 @@ from aiogram_i18n.cores.fluent_runtime_core import FluentRuntimeCore
 from bot.commands import start_router, help_router
 from bot.core import logger, setup_logging, config
 from bot.handlers import menu, schedule
-from bot.middlewares import LocaleMiddleware 
+from bot.middlewares import LocaleMiddleware
 
 
 async def set_bot_commands(bot: Bot) -> None:
@@ -31,7 +31,7 @@ def setup_middlewares(dp: Dispatcher, i18n: I18nMiddleware) -> None:
     dp.update.middleware(LocaleMiddleware())
     dp.callback_query.middleware(LocaleMiddleware())
     dp.message.middleware(LocaleMiddleware())
-    
+
     i18n.setup(dispatcher=dp)
 
 
@@ -51,10 +51,10 @@ async def main() -> None:
     i18n = await setup_i18n()
 
     dp = Dispatcher()
-    
+
     for router in [start_router, help_router, menu.router, schedule.router]:
         dp.include_router(router)
-    
+
     setup_middlewares(dp, i18n)
 
     try:
