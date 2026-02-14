@@ -36,7 +36,7 @@ def get_back_keyboard(i18n: I18nContext, target: str = "back_to_menu") -> Inline
         [
             InlineKeyboardButton(
                 text=i18n.get("btn-back"),
-                icon_custom_emoji_id="5257963315258204021",
+                icon_custom_emoji_id="5960671702059848143",
                 style=ButtonStyle.DANGER,
                 callback_data=target,
             )
