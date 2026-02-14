@@ -46,8 +46,7 @@ def format_week_schedule(i18n: I18nContext, week_schedule: dict) -> str:
     ]
 
     for day, (lessons, day_date) in week_schedule.items():
-        day_header = i18n.get("week-day-header", day=day, date=day_date)
-        parts.append(f"{day_header}\n")
+        parts.append(i18n.get("week-day-header", day=day, date=day_date))
 
         lessons_text = "\n\n".join(_format_lesson(i18n, lesson) for lesson in lessons)
         blockquote = f"<blockquote expandable>{lessons_text}</blockquote>"

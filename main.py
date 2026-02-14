@@ -24,20 +24,6 @@ async def set_bot_commands(bot: Bot) -> None:
     await bot.set_my_commands(commands)
 
 
-async def setup_i18n() -> I18nMiddleware:
-    i18n_core = FluentRuntimeCore(path="locales/{locale}")
-    await i18n_core.startup()
-    return I18nMiddleware(core=i18n_core, default_locale="uk")
-
-
-def setup_middlewares(dp: Dispatcher, i18n: I18nMiddleware) -> None:
-    dp.update.middleware(LocaleMiddleware())
-    dp.callback_query.middleware(LocaleMiddleware())
-    dp.message.middleware(LocaleMiddleware())
-
-    i18n.setup(dispatcher=dp)
-
-
 async def main() -> None:
     setup_logging()
 
@@ -51,14 +37,20 @@ async def main() -> None:
 
     await set_bot_commands(bot)
 
-    i18n = await setup_i18n()
+    i18n_core = FluentRuntimeCore(path="locales/{locale}")
+    await i18n_core.startup()
+    i18n = I18nMiddleware(core=i18n_core, default_locale="uk")
 
     dp = Dispatcher()
 
     for router in [start_router, help_router, schedule_router, menu.router, schedule.router]:
         dp.include_router(router)
 
-    setup_middlewares(dp, i18n)
+    dp.update.middleware(LocaleMiddleware())
+    dp.callback_query.middleware(LocaleMiddleware())
+    dp.message.middleware(LocaleMiddleware())
+
+    i18n.setup(dispatcher=dp)
 
     try:
         await dp.start_polling(
