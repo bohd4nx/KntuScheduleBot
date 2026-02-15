@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from aiogram import Router
 from aiogram.filters import Command
@@ -29,7 +29,7 @@ async def today_command(message: Message, i18n: I18nContext) -> None:
 
 @router.message(Command("tomorrow"))
 async def tomorrow_command(message: Message, i18n: I18nContext) -> None:
-    if datetime.now() < config.SEMESTER_START_DATE:
+    if datetime.now() + timedelta(days=1) < config.SEMESTER_START_DATE:
         await message.answer(i18n.get("semester-not-started"))
         return
 
