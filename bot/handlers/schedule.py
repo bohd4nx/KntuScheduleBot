@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from aiogram import Router, F
 from aiogram.types import CallbackQuery
@@ -33,7 +33,7 @@ async def schedule_today_callback(callback: CallbackQuery, i18n: I18nContext) ->
 
 @router.callback_query(F.data == "schedule_tomorrow")
 async def schedule_tomorrow_callback(callback: CallbackQuery, i18n: I18nContext) -> None:
-    if datetime.now() < config.SEMESTER_START_DATE:
+    if datetime.now() + timedelta(days=1) < config.SEMESTER_START_DATE:
         await callback.answer(i18n.get("alert-semester-not-started"), show_alert=True)
         return
 
