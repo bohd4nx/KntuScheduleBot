@@ -12,6 +12,12 @@ def _format_lesson(i18n: I18nContext, lesson: dict[str, str]) -> str:
         "Спортзал": i18n.get("room-gym")
     }.get(lesson["room"], i18n.get("room-regular", room=lesson["room"]))
 
+    online_link_display = (
+        f"{i18n.get('online-link', url=lesson['online_link'])}\n"
+        if lesson.get("online_link")
+        else ""
+    )
+
     return i18n.get(
         "lesson-item",
         number=lesson["number"],
@@ -19,7 +25,8 @@ def _format_lesson(i18n: I18nContext, lesson: dict[str, str]) -> str:
         time=f"{lesson['start']} – {lesson['end']}",
         teachers_count=teachers_count,
         teacher=lesson["teacher"],
-        room_display=room_display
+        room_display=room_display,
+        online_link_display=online_link_display,
     )
 
 
