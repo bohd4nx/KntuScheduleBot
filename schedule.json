@@ -33,36 +33,42 @@
         "numerator": {
           "subject": "Вища математика",
           "teacher": "Гуцул Василь Іванович",
-          "room": "516"
+          "room": "516",
+          "online_link": "https://us02web.zoom.us/j/8057645170?pwd=SlJGRGRhM2dBcnVlN0dYUmVJYll0UT09"
         },
         "denominator": {
           "subject": "Вища математика",
           "teacher": "Гуцул Василь Іванович",
-          "room": "516"
+          "room": "516",
+          "online_link": "https://us02web.zoom.us/j/8057645170?pwd=SlJGRGRhM2dBcnVlN0dYUmVJYll0UT09"
         }
       },
       "2": {
         "numerator": {
           "subject": "Вища математика",
           "teacher": "Гуцул Василь Іванович",
-          "room": "510"
+          "room": "510",
+          "online_link": "https://us02web.zoom.us/j/8057645170?pwd=SlJGRGRhM2dBcnVlN0dYUmVJYll0UT09"
         },
         "denominator": {
           "subject": "Вища математика",
           "teacher": "Гуцул Василь Іванович",
-          "room": "510"
+          "room": "510",
+          "online_link": "https://us02web.zoom.us/j/8057645170?pwd=SlJGRGRhM2dBcnVlN0dYUmVJYll0UT09"
         }
       },
       "3": {
         "numerator": {
           "subject": "Цифрова схемотехніка",
           "teacher": "Минайленко Роман Миколайович",
-          "room": "500"
+          "room": "500",
+          "online_link": "https://us05web.zoom.us/j/2656455060?pwd=emFJaU9xdlhHSFY4UXNVaGh5bVc4QT09"
         },
         "denominator": {
           "subject": "Цифрова схемотехніка",
           "teacher": "Минайленко Роман Миколайович",
-          "room": "500"
+          "room": "500",
+          "online_link": "https://us05web.zoom.us/j/2656455060?pwd=emFJaU9xdlhHSFY4UXNVaGh5bVc4QT09"
         }
       }
     },
@@ -71,36 +77,42 @@
         "numerator": {
           "subject": "Скриптові мови програмування",
           "teacher": "Ткаченко Олександр Сергійович",
-          "room": "505"
+          "room": "505",
+          "online_link": "https://us04web.zoom.us/j/7267434624?pwd=aXpHQWdoREYrWjBsT2I5azlzNlprQT09"
         },
         "denominator": {
           "subject": "Базові методології та ТП",
           "teacher": "Доренський Олександр Павлович",
-          "room": "500"
+          "room": "500",
+          "online_link": "https://us02web.zoom.us/j/82515995685"
         }
       },
       "2": {
         "numerator": {
           "subject": "Фізика",
           "teacher": "Ковальов Сергій Григорович",
-          "room": "416"
+          "room": "416",
+          "online_link": "https://us05web.zoom.us/j/2656455060?pwd=emFJaU9xdlhHSFY4UXNVaGh5bVc4QT09"
         },
         "denominator": {
           "subject": "Цифрова схемотехніка",
           "teacher": "Минайленко Роман Миколайович",
-          "room": "508"
+          "room": "508",
+          "online_link": "https://us05web.zoom.us/j/2656455060?pwd=emFJaU9xdlhHSFY4UXNVaGh5bVc4QT09"
         }
       },
       "3": {
         "numerator": {
           "subject": "Основи здорового способу життя",
           "teacher": "Мотузенко Тетяна Євгенівна, Липчанська Лілія Митрофанівна, Савченко Володимир Валерійович, Махно Вікторія Володимирівна",
-          "room": "Спортзал"
+          "room": "Спортзал",
+          "online_link": "https://us04web.zoom.us/j/2799088057?pwd=SpJu2yZOjHiQRV3AFAFub3-xUqfcEk.1"
         },
         "denominator": {
           "subject": "Основи здорового способу життя",
           "teacher": "Мотузенко Тетяна Євгенівна, Липчанська Лілія Митрофанівна, Савченко Володимир Валерійович, Махно Вікторія Володимирівна",
-          "room": "Спортзал"
+          "room": "Спортзал",
+          "online_link": "https://us04web.zoom.us/j/2799088057?pwd=SpJu2yZOjHiQRV3AFAFub3-xUqfcEk.1"
         }
       }
     },
@@ -109,36 +121,42 @@
         "numerator": {
           "subject": "Скриптові мови програмування",
           "teacher": "Ткачук Роман Олегович",
-          "room": "2"
+          "room": "2",
+          "online_link": "https://us04web.zoom.us/j/7267434624?pwd=aXpHQWdoREYrWjBsT2I5azlzNlprQT09"
         },
         "denominator": {
           "subject": "Скриптові мови програмування",
           "teacher": "Ткачук Роман Олегович",
-          "room": "2"
+          "room": "2",
+          "online_link": "https://us04web.zoom.us/j/7267434624?pwd=aXpHQWdoREYrWjBsT2I5azlzNlprQT09"
         }
       },
       "2": {
         "numerator": {
           "subject": "Базові методології та ТП",
           "teacher": "Коваленко Анастасія Сергіївна",
-          "room": "505"
+          "room": "505",
+          "online_link": "https://us02web.zoom.us/j/82515995685"
         },
         "denominator": {
           "subject": "Базові методології та ТП",
           "teacher": "Коваленко Анастасія Сергіївна",
-          "room": "505"
+          "room": "505",
+          "online_link": "https://us02web.zoom.us/j/82515995685"
         }
       },
       "3": {
         "numerator": {
           "subject": "Іноземна мова",
           "teacher": "Миценко Валерій Іванович",
-          "room": "407А"
+          "room": "407А",
+          "online_link": "https://meet.google.com/mmt-wbfq-uqu"
         },
         "denominator": {
           "subject": "Іноземна мова",
           "teacher": "Миценко Валерій Іванович",
-          "room": "407А"
+          "room": "407А",
+          "online_link": "https://meet.google.com/mmt-wbfq-uqu"
         }
       }
     },
@@ -147,43 +165,50 @@
         "numerator": {
           "subject": "Історія та культура України",
           "teacher": "Коломієць Олена Борисівна",
-          "room": "2"
+          "room": "2",
+          "online_link": "https://us04web.zoom.us/j/7998600327?pwd=b1EwUERaUjdxekhMYmkxRllpM1RsQT09"
         },
         "denominator": {
           "subject": "Історія та культура України",
           "teacher": "Коломієць Олена Борисівна",
-          "room": "2"
+          "room": "2",
+          "online_link": "https://us04web.zoom.us/j/7998600327?pwd=b1EwUERaUjdxekhMYmkxRllpM1RsQT09"
         }
       },
       "2": {
         "numerator": {
           "subject": "Історія та культура України",
           "teacher": "Коломієць Олена Борисівна",
-          "room": "459"
+          "room": "459",
+          "online_link": "https://us04web.zoom.us/j/7998600327?pwd=b1EwUERaUjdxekhMYmkxRllpM1RsQT09"
         },
         "denominator": {
           "subject": "Історія та культура України",
           "teacher": "Коломієць Олена Борисівна",
-          "room": "459"
+          "room": "459",
+          "online_link": "https://us04web.zoom.us/j/7998600327?pwd=b1EwUERaUjdxekhMYmkxRllpM1RsQT09"
         }
       },
       "3": {
         "numerator": {
           "subject": "Фізика",
           "teacher": "Ковальов Сергій Григорович",
-          "room": "414"
+          "room": "414",
+          "online_link": "https://meet.google.com/bff-wkkq-zxh"
         },
         "denominator": {
           "subject": "Фізика",
           "teacher": "Ковальов Сергій Григорович",
-          "room": "414"
+          "room": "414",
+          "online_link": "https://meet.google.com/bff-wkkq-zxh"
         }
       },
       "4": {
         "numerator": {
           "subject": "Фізика",
           "teacher": "Ковальов Сергій Григорович",
-          "room": "409"
+          "room": "409",
+          "online_link": "https://meet.google.com/bff-wkkq-zxh"
         },
         "denominator": null
       }

@@ -37,7 +37,7 @@ alert-no-lessons-tomorrow = 🎉 Завтра пар немає! Вихідни�
 alert-semester-not-started = 🙃 Навчання ще не почалось! Відпочиваємо!
 
 lesson-item = <b>{$number}. {$subject}</b> (<code>{$time}</code>)
-    {$teachers_count ->
+    {$online_link_display}{$teachers_count ->
 [1] <b>Викладач:</b> {$teacher}
 *[other] <b>Викладачі:</b> {$teacher}
     }
@@ -45,6 +45,7 @@ lesson-item = <b>{$number}. {$subject}</b> (<code>{$time}</code>)
 
 room-gym = <b>Заняття проходить у спортзалі</b>
 room-regular = Аудиторія: <b>{$room}</b>
+online-link = <b>Посилання:</b> <a href="{$url}">підключитися до заняття</a>
 
 week-numerator = Чисельник
 week-denominator = Знаменник

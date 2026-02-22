@@ -38,6 +38,7 @@ class ScheduleService:
                 "subject": lesson_info.get("subject", "Невідомо"),
                 "teacher": lesson_info.get("teacher", "Невідомо"),
                 "room": lesson_info.get("room", "Невідомо"),
+                "online_link": lesson_info.get("online_link", ""),
             })
 
         return sorted(lessons, key=lambda x: int(x["number"]))
