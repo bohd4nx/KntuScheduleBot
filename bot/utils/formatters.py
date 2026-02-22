@@ -16,7 +16,7 @@ def _format_lesson(i18n: I18nContext, lesson: dict[str, str]) -> str:
         "lesson-item",
         number=lesson["number"],
         subject=lesson["subject"],
-        time=f"{lesson['start']}–{lesson['end']}",
+        time=f"{lesson['start']} – {lesson['end']}",
         teachers_count=teachers_count,
         teacher=lesson["teacher"],
         room_display=room_display
@@ -24,7 +24,7 @@ def _format_lesson(i18n: I18nContext, lesson: dict[str, str]) -> str:
 
 
 def format_day_schedule(i18n: I18nContext, day: str, lessons: list[dict[str, str]], date: datetime) -> str:
-    week_type = i18n.get(f"week-{schedule_service.get_week_type()}")
+    week_type = i18n.get(f"week-{schedule_service.get_week_type(date)}")
 
     parts = [i18n.get("day-schedule", day=day, week_type=week_type, date=date), ""]
 
@@ -37,8 +37,8 @@ def format_day_schedule(i18n: I18nContext, day: str, lessons: list[dict[str, str
 
 
 def format_week_schedule(i18n: I18nContext, week_schedule: dict) -> str:
-    week_type = i18n.get(f"week-{schedule_service.get_week_type()}")
     start_date, end_date = schedule_service.get_week_dates()
+    week_type = i18n.get(f"week-{schedule_service.get_week_type(start_date)}")
 
     parts = [
         i18n.get("week-schedule-header", week_type=week_type, start_date=start_date, end_date=end_date),
