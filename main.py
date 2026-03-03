@@ -5,7 +5,7 @@ from aiogram.client.default import DefaultBotProperties
 from aiogram.enums import ParseMode
 from aiogram.types import BotCommand
 from aiogram_i18n import I18nMiddleware
-from aiogram_i18n.cores.fluent_runtime_core import FluentRuntimeCore
+from aiogram_i18n.cores.fluent_compile_core import FluentCompileCore
 
 from bot.commands import start_router, help_router, schedule_router
 from bot.core import logger, setup_logging, config
@@ -37,7 +37,7 @@ async def main() -> None:
 
     await set_bot_commands(bot)
 
-    i18n_core = FluentRuntimeCore(path="locales/{locale}")
+    i18n_core = FluentCompileCore(path="locales/{locale}")
     await i18n_core.startup()
     i18n = I18nMiddleware(core=i18n_core, default_locale="uk")
 
