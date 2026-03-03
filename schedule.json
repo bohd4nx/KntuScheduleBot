@@ -1,4 +1,5 @@
 {
+  "_notes": "Увага: посилання на онлайн-заняття можуть бути неактуальними — вони оновлюються в міру зміни або підтвердження викладачами.",
   "group": "КН-25",
   "course": 1,
   "class_times": {
@@ -78,7 +79,7 @@
           "subject": "Скриптові мови програмування",
           "teacher": "Ткаченко Олександр Сергійович",
           "room": "505",
-          "online_link": "https://us04web.zoom.us/j/7267434624?pwd=aXpHQWdoREYrWjBsT2I5azlzNlprQT09"
+          "online_link": "https://meet.google.com/gqf-ehke-jgv"
         },
         "denominator": {
           "subject": "Базові методології та ТП",
@@ -122,13 +123,13 @@
           "subject": "Скриптові мови програмування",
           "teacher": "Ткачук Роман Олегович",
           "room": "2",
-          "online_link": "https://us04web.zoom.us/j/7267434624?pwd=aXpHQWdoREYrWjBsT2I5azlzNlprQT09"
+          "online_link": "https://meet.google.com/gqf-ehke-jgv"
         },
         "denominator": {
           "subject": "Скриптові мови програмування",
           "teacher": "Ткачук Роман Олегович",
           "room": "2",
-          "online_link": "https://us04web.zoom.us/j/7267434624?pwd=aXpHQWdoREYrWjBsT2I5azlzNlprQT09"
+          "online_link": "https://meet.google.com/gqf-ehke-jgv"
         }
       },
       "2": {
