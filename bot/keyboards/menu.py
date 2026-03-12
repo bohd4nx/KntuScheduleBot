@@ -25,20 +25,23 @@ def get_main_menu_keyboard(i18n: I18nContext) -> InlineKeyboardMarkup:
                 callback_data="schedule_week",
             ),
         ],
-
     ]
 
     return InlineKeyboardMarkup(inline_keyboard=buttons)
 
 
-def get_back_keyboard(i18n: I18nContext, target: str = "back_to_menu") -> InlineKeyboardMarkup:
-    return InlineKeyboardMarkup(inline_keyboard=[
-        [
-            InlineKeyboardButton(
-                text=i18n.get("btn-back"),
-                icon_custom_emoji_id="5960671702059848143",
-                style=ButtonStyle.DANGER,
-                callback_data=target,
-            )
+def get_back_keyboard(
+    i18n: I18nContext, target: str = "back_to_menu"
+) -> InlineKeyboardMarkup:
+    return InlineKeyboardMarkup(
+        inline_keyboard=[
+            [
+                InlineKeyboardButton(
+                    text=i18n.get("btn-back"),
+                    icon_custom_emoji_id="5960671702059848143",
+                    style=ButtonStyle.DANGER,
+                    callback_data=target,
+                )
+            ]
         ]
-    ])
+    )

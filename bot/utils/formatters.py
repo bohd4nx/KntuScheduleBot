@@ -8,9 +8,9 @@ from bot.services import schedule_service
 def _format_lesson(i18n: I18nContext, lesson: dict[str, str]) -> str:
     teachers_count = len(lesson["teacher"].split(", "))
 
-    room_display = {
-        "Спортзал": i18n.get("room-gym")
-    }.get(lesson["room"], i18n.get("room-regular", room=lesson["room"]))
+    room_display = {"Спортзал": i18n.get("room-gym")}.get(
+        lesson["room"], i18n.get("room-regular", room=lesson["room"])
+    )
 
     online_link_display = (
         f"{i18n.get('online-link', url=lesson['online_link'])}\n"
@@ -30,7 +30,9 @@ def _format_lesson(i18n: I18nContext, lesson: dict[str, str]) -> str:
     )
 
 
-def format_day_schedule(i18n: I18nContext, day: str, lessons: list[dict[str, str]], date: datetime) -> str:
+def format_day_schedule(
+    i18n: I18nContext, day: str, lessons: list[dict[str, str]], date: datetime
+) -> str:
     week_type = i18n.get(f"week-{schedule_service.get_week_type(date)}")
 
     parts = [i18n.get("day-schedule", day=day, week_type=week_type, date=date), ""]
@@ -48,8 +50,13 @@ def format_week_schedule(i18n: I18nContext, week_schedule: dict) -> str:
     week_type = i18n.get(f"week-{schedule_service.get_week_type(start_date)}")
 
     parts = [
-        i18n.get("week-schedule-header", week_type=week_type, start_date=start_date, end_date=end_date),
-        ""
+        i18n.get(
+            "week-schedule-header",
+            week_type=week_type,
+            start_date=start_date,
+            end_date=end_date,
+        ),
+        "",
     ]
 
     for day, (lessons, day_date) in week_schedule.items():
