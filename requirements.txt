@@ -1,4 +1,4 @@
-aiogram_i18n==1.4
+aiogram_i18n==1.5
 fluent_compiler==1.1
 python-dotenv==1.2.2
-aiogram[i18n]==3.26.0
+aiogram[i18n]==3.25.0   # Can't instantiate abstract class Null without an implementation for abstract method 'date_time'
