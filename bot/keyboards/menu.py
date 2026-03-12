@@ -1,4 +1,3 @@
-from aiogram.enums import ButtonStyle
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from aiogram_i18n import I18nContext
 
@@ -8,19 +7,19 @@ def get_main_menu_keyboard(i18n: I18nContext) -> InlineKeyboardMarkup:
         [
             InlineKeyboardButton(
                 text=i18n.get("btn-today"),
-                icon_custom_emoji_id="5258226313285607065",
+                icon_custom_emoji_id="5226513232549664618",
                 callback_data="schedule_today",
             ),
             InlineKeyboardButton(
                 text=i18n.get("btn-tomorrow"),
-                icon_custom_emoji_id="5253959125838090076",
+                icon_custom_emoji_id="5226513232549664618",
                 callback_data="schedule_tomorrow",
             ),
         ],
         [
             InlineKeyboardButton(
                 text=i18n.get("btn-week"),
-                icon_custom_emoji_id="5258123337149717894",
+                icon_custom_emoji_id="5258105663359294787",
                 callback_data="schedule_week",
             ),
         ],
