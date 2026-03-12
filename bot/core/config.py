@@ -1,10 +1,11 @@
 import logging
 import os
 import sys
-from datetime import datetime
 from pathlib import Path
 
 from dotenv import load_dotenv
+
+from .constants import SEMESTER_START_DATE, SEMESTER_END_DATE
 
 logger = logging.getLogger(__name__)
 
@@ -24,16 +25,8 @@ class Config:
             sys.exit(1)
 
         self.BOT_TOKEN: str = os.getenv("BOT_TOKEN")
-
-        semester_start_str = os.getenv("SEMESTER_START_DATE", "16.02.2026")
-        semester_end_str = os.getenv("SEMESTER_END_DATE", "01.07.2026")
-
-        self.SEMESTER_START_DATE: datetime = datetime.strptime(
-            semester_start_str, "%d.%m.%Y"
-        )
-        self.SEMESTER_END_DATE: datetime = datetime.strptime(
-            semester_end_str, "%d.%m.%Y"
-        )
+        self.SEMESTER_START_DATE = SEMESTER_START_DATE
+        self.SEMESTER_END_DATE = SEMESTER_END_DATE
 
 
 config = Config()

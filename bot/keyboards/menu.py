@@ -21,7 +21,6 @@ def get_main_menu_keyboard(i18n: I18nContext) -> InlineKeyboardMarkup:
             InlineKeyboardButton(
                 text=i18n.get("btn-week"),
                 icon_custom_emoji_id="5258123337149717894",
-                style=ButtonStyle.PRIMARY,
                 callback_data="schedule_week",
             ),
         ],
@@ -39,7 +38,6 @@ def get_back_keyboard(
                 InlineKeyboardButton(
                     text=i18n.get("btn-back"),
                     icon_custom_emoji_id="5960671702059848143",
-                    style=ButtonStyle.DANGER,
                     callback_data=target,
                 )
             ]
