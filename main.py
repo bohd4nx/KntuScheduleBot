@@ -8,13 +8,12 @@ from aiogram_i18n import I18nMiddleware
 from aiogram_i18n.cores.fluent_compile_core import FluentCompileCore
 
 from bot.commands import start_router, help_router, schedule_router
-from bot.core import logger, setup_logging, config
+from bot.core import config, logger, setup_logging, DEFAULT_LOCALE
 from bot.handlers import menu, schedule
-from bot.middlewares import LocaleMiddleware
 
 
 async def set_bot_commands(bot: Bot) -> None:
-    commands = [
+    commands: list[BotCommand] = [
         BotCommand(command="start", description="🏠 Головне меню"),
         BotCommand(command="today", description="🗓️  Розклад на сьогодні"),
         BotCommand(command="tomorrow", description="🗓️  Розклад на завтра"),
@@ -38,7 +37,7 @@ async def main() -> None:
 
     i18n_core = FluentCompileCore(path="locales/{locale}")
     await i18n_core.startup()
-    i18n = I18nMiddleware(core=i18n_core, default_locale="uk")
+    i18n = I18nMiddleware(core=i18n_core, default_locale=DEFAULT_LOCALE)
 
     dp = Dispatcher()
 
@@ -50,10 +49,6 @@ async def main() -> None:
         schedule.router,
     ]:
         dp.include_router(router)
-
-    dp.update.middleware(LocaleMiddleware())
-    dp.callback_query.middleware(LocaleMiddleware())
-    dp.message.middleware(LocaleMiddleware())
 
     i18n.setup(dispatcher=dp)
 
@@ -75,5 +70,5 @@ if __name__ == "__main__":
         asyncio.run(main())
     except (KeyboardInterrupt, SystemExit):
         pass
-    except Exception as e:
-        logger.exception(f"Unexpected error: {e}")
+    except Exception as exc:
+        logger.exception(f"Unexpected error: {exc}")

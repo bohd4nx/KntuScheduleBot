@@ -38,8 +38,13 @@ cp .env.example .env
 
 ```env
 BOT_TOKEN=ваш_токен_бота
-SEMESTER_START_DATE=16.02.2026
-SEMESTER_END_DATE=01.07.2026
+```
+
+Дати семестру тепер задаються в `bot/core/constants.py`:
+
+```python
+SEMESTER_START_DATE = datetime.strptime("16.02.2026", DATE_FORMAT)
+SEMESTER_END_DATE = datetime.strptime("01.07.2026", DATE_FORMAT)
 ```
 
 ### Крок 4: Налаштування розкладу

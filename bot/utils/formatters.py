@@ -2,10 +2,11 @@ from datetime import datetime
 
 from aiogram_i18n import I18nContext
 
+from bot.services.schedule import Lesson
 from bot.services import schedule_service
 
 
-def _format_lesson(i18n: I18nContext, lesson: dict[str, str]) -> str:
+def _format_lesson(i18n: I18nContext, lesson: Lesson) -> str:
     teachers_count = len(lesson["teacher"].split(", "))
 
     room_display = {"Спортзал": i18n.get("room-gym")}.get(
@@ -31,7 +32,7 @@ def _format_lesson(i18n: I18nContext, lesson: dict[str, str]) -> str:
 
 
 def format_day_schedule(
-    i18n: I18nContext, day: str, lessons: list[dict[str, str]], date: datetime
+    i18n: I18nContext, day: str, lessons: list[Lesson], date: datetime
 ) -> str:
     week_type = i18n.get(f"week-{schedule_service.get_week_type(date)}")
 
@@ -45,7 +46,9 @@ def format_day_schedule(
     return "\n".join(parts)
 
 
-def format_week_schedule(i18n: I18nContext, week_schedule: dict) -> str:
+def format_week_schedule(
+    i18n: I18nContext, week_schedule: dict[str, tuple[list[Lesson], datetime]]
+) -> str:
     start_date, end_date = schedule_service.get_week_dates()
     week_type = i18n.get(f"week-{schedule_service.get_week_type(start_date)}")
 
