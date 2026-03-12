@@ -15,9 +15,12 @@ async def back_to_menu_callback(callback: CallbackQuery, i18n: I18nContext) -> N
     name = escape_html(user.full_name or user.first_name)
 
     await callback.message.edit_text(
-        i18n.get("start", name=name,
-                 semester_start=config.SEMESTER_START_DATE,
-                 semester_end=config.SEMESTER_END_DATE),
-        reply_markup=get_main_menu_keyboard(i18n)
+        i18n.get(
+            "start",
+            name=name,
+            semester_start=config.SEMESTER_START_DATE,
+            semester_end=config.SEMESTER_END_DATE,
+        ),
+        reply_markup=get_main_menu_keyboard(i18n),
     )
     await callback.answer()

@@ -30,9 +30,8 @@ async def main() -> None:
     bot = Bot(
         token=config.BOT_TOKEN,
         default=DefaultBotProperties(
-            parse_mode=ParseMode.HTML,
-            link_preview_is_disabled=True
-        )
+            parse_mode=ParseMode.HTML, link_preview_is_disabled=True
+        ),
     )
 
     await set_bot_commands(bot)
@@ -43,7 +42,13 @@ async def main() -> None:
 
     dp = Dispatcher()
 
-    for router in [start_router, help_router, schedule_router, menu.router, schedule.router]:
+    for router in [
+        start_router,
+        help_router,
+        schedule_router,
+        menu.router,
+        schedule.router,
+    ]:
         dp.include_router(router)
 
     dp.update.middleware(LocaleMiddleware())

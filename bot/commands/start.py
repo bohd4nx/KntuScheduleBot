@@ -16,8 +16,11 @@ async def start_command(message: Message, i18n: I18nContext) -> None:
     name = escape_html(user.full_name or user.first_name)
 
     await message.answer(
-        i18n.get("start", name=name,
-                 semester_start=config.SEMESTER_START_DATE,
-                 semester_end=config.SEMESTER_END_DATE),
+        i18n.get(
+            "start",
+            name=name,
+            semester_start=config.SEMESTER_START_DATE,
+            semester_end=config.SEMESTER_END_DATE,
+        ),
         reply_markup=get_main_menu_keyboard(i18n),
     )

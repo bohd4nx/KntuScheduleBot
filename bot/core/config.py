@@ -28,8 +28,12 @@ class Config:
         semester_start_str = os.getenv("SEMESTER_START_DATE", "16.02.2026")
         semester_end_str = os.getenv("SEMESTER_END_DATE", "01.07.2026")
 
-        self.SEMESTER_START_DATE: datetime = datetime.strptime(semester_start_str, "%d.%m.%Y")
-        self.SEMESTER_END_DATE: datetime = datetime.strptime(semester_end_str, "%d.%m.%Y")
+        self.SEMESTER_START_DATE: datetime = datetime.strptime(
+            semester_start_str, "%d.%m.%Y"
+        )
+        self.SEMESTER_END_DATE: datetime = datetime.strptime(
+            semester_end_str, "%d.%m.%Y"
+        )
 
 
 config = Config()
