@@ -1,3 +1,3 @@
-from .lesson import get_groups, get_lessons, upsert_group
+from .lesson import get_lessons, upsert_group
 
-__all__ = ["upsert_group", "get_lessons", "get_groups"]
+__all__ = ["upsert_group", "get_lessons"]

@@ -1,7 +1,6 @@
 from typing import Any
 
-from sqlalchemy import delete, select
-from sqlalchemy.dialects.sqlite import insert
+from sqlalchemy import delete, insert, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from ..models.lesson import Lesson

@@ -61,4 +61,4 @@ async def week_command(message: Message, i18n: I18nContext, session: AsyncSessio
     holiday_names: dict[datetime, str] = {
         dt: name for _, (_, dt) in week_schedule.items() if (name := holiday_service.get_name(dt.date()))
     }
-    await message.answer(format_week_schedule(i18n, week_schedule, holiday_names or None))
+    await message.answer(format_week_schedule(i18n, week_schedule, holiday_names))

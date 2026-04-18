@@ -4,7 +4,7 @@ from typing import Literal
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from bot.core import DAYS, WORK_DAYS, config
-from bot.core.constants import REGULAR_CLASS_TIMES, get_week_monday, get_week_type
+from bot.core.constants import get_week_monday, get_week_type
 from bot.database.crud import get_lessons
 from bot.database.models import Lesson
 
@@ -19,11 +19,6 @@ class ScheduleService:
         group = config.SCHEDULE_GROUP or ""
         wt = week_type or get_week_type(datetime.now())
         rows = await get_lessons(session, group, day, wt)
-        # Час пари не зберігається в БД — додаємо з констант на льоту.
-        for row in rows:
-            times = REGULAR_CLASS_TIMES.get(row.lesson_number, {})
-            row.__dict__.setdefault("start", times.get("start", ""))
-            row.__dict__.setdefault("end", times.get("end", ""))
         return rows
 
     async def get_today_schedule(self, session: AsyncSession) -> tuple[str, list[Lesson], datetime]:

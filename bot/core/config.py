@@ -18,7 +18,7 @@ class Config:
             logger.error(".env file not found! Please create one from .env.example")
             sys.exit(1)
 
-        load_dotenv(env_path)
+        load_dotenv(env_path, encoding="utf-8")
 
         self.BOT_TOKEN: str = self._require_env("BOT_TOKEN")
         self.PARSER_SOURCE_URL: str | None = os.getenv("PARSER_SOURCE_URL", "").strip() or None

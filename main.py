@@ -9,7 +9,7 @@ from aiogram_i18n.cores.fluent_compile_core import FluentCompileCore
 
 from bot.commands import help_router, schedule_router, start_router
 from bot.core import DEFAULT_LOCALE, config, logger, setup_logging
-from bot.database import init_db
+from bot.database import close_db, init_db
 from bot.handlers import menu, schedule
 from bot.middlewares import DatabaseMiddleware
 
@@ -77,6 +77,7 @@ async def main() -> None:
         )
     finally:
         await i18n.core.shutdown()
+        await close_db()
         await bot.session.close()
 
 

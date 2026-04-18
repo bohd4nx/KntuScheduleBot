@@ -76,7 +76,7 @@ async def schedule_week_callback(callback: CallbackQuery, i18n: I18nContext, ses
         dt: name for _, (_, dt) in week_schedule.items() if (name := holiday_service.get_name(dt.date()))
     }
     await callback.message.edit_text(
-        format_week_schedule(i18n, week_schedule, holiday_names or None),
+        format_week_schedule(i18n, week_schedule, holiday_names),
         reply_markup=get_back_keyboard(i18n),
     )
     await callback.answer()
