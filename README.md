@@ -75,15 +75,3 @@ SEMESTER_END_DATE   = datetime.strptime("01.07.2026", DATE_FORMAT)
 ```bash
 python main.py
 ```
-
----
-
-<div align="center">
-
-### Made with ❤️ by [@bohd4nx](https://t.me/bohd4nx)
-
-**Star ⭐ this repo if you found it useful!**
-
-</div>
-
-

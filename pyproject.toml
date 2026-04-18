@@ -9,10 +9,11 @@ dependencies = [
     "aiogram_i18n>=1.4",
     "fluent_compiler>=1.1",
     "python-dotenv>=1.1.0",
+    "xlrd>=2.0.0",
 ]
 
 [project.optional-dependencies]
-dev = ["ruff", "mypy"]
+dev = ["ruff", "mypy", "types-xlrd"]
 
 [tool.ruff]
 line-length = 128

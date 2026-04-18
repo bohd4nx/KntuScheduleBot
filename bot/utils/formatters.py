@@ -7,8 +7,10 @@ from bot.services.schedule import Lesson
 
 
 def _format_lesson(i18n: I18nContext, lesson: Lesson) -> str:
+    """Форматує одну пару в локалізований рядок."""
     teachers_count = len(lesson["teacher"].split(", "))
 
+    # Спортзал виводиться інакше, будь-яка інша аудиторія — зі знаком кімнати.
     room_display = {"Спортзал": i18n.get("room-gym")}.get(lesson["room"], i18n.get("room-regular", room=lesson["room"]))
 
     online_link_display = f"{i18n.get('online-link', url=lesson['online_link'])}\n" if lesson.get("online_link") else ""
@@ -26,6 +28,7 @@ def _format_lesson(i18n: I18nContext, lesson: Lesson) -> str:
 
 
 def format_day_schedule(i18n: I18nContext, day: str, lessons: list[Lesson], date: datetime) -> str:
+    """Форматує розклад на один день."""
     week_type = i18n.get(f"week-{schedule_service.get_week_type(date)}")
 
     parts = [i18n.get("day-schedule", day=day, week_type=week_type, date=date), ""]
@@ -39,6 +42,7 @@ def format_day_schedule(i18n: I18nContext, day: str, lessons: list[Lesson], date
 
 
 def format_week_schedule(i18n: I18nContext, week_schedule: dict[str, tuple[list[Lesson], datetime]]) -> str:
+    """Форматує розклад на весь тиждень у вигляді блокцит, один день — один блок."""
     start_date, end_date = schedule_service.get_week_dates()
     week_type = i18n.get(f"week-{schedule_service.get_week_type(start_date)}")
 

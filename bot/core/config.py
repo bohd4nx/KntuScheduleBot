@@ -21,6 +21,8 @@ class Config:
         load_dotenv(env_path)
 
         self.BOT_TOKEN: str = self._require_env("BOT_TOKEN")
+        self.PARSER_SOURCE_URL: str | None = os.getenv("PARSER_SOURCE_URL", "").strip() or None
+        self.SCHEDULE_GROUP: str | None = os.getenv("SCHEDULE_GROUP", "").strip() or None
         self.SEMESTER_START_DATE = SEMESTER_START_DATE
         self.SEMESTER_END_DATE = SEMESTER_END_DATE
 
