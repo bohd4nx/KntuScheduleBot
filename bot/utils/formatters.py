@@ -2,9 +2,15 @@ from datetime import datetime
 
 from aiogram_i18n import I18nContext
 
-from bot.core.constants import CURATOR_CLASS_TIMES, CURATOR_HOUR_DATES, DATE_FORMAT, REGULAR_CLASS_TIMES
+from bot.core.constants import (
+    CURATOR_CLASS_TIMES,
+    CURATOR_HOUR_DATES,
+    DATE_FORMAT,
+    REGULAR_CLASS_TIMES,
+    get_week_dates,
+    get_week_type,
+)
 from bot.database.models.lesson import Lesson
-from bot.services import schedule_service
 
 
 def _is_curator_day(date: datetime) -> bool:
@@ -35,7 +41,7 @@ def _format_lesson(i18n: I18nContext, lesson: Lesson, curator_day: bool = False)
 
 def format_day_schedule(i18n: I18nContext, day: str, lessons: list[Lesson], date: datetime) -> str:
     """Форматує розклад на один день."""
-    week_type = i18n.get(f"week-{schedule_service.get_week_type(date)}")
+    week_type = i18n.get(f"week-{get_week_type(date)}")
     curator_day = _is_curator_day(date)
     header = i18n.get("day-schedule", day=day, week_type=week_type, date=date)
     if curator_day:
@@ -50,11 +56,11 @@ def format_day_schedule(i18n: I18nContext, day: str, lessons: list[Lesson], date
 
 def format_week_schedule(i18n: I18nContext, week_schedule: dict[str, tuple[list[Lesson], datetime]]) -> str:
     """Форматує розклад на весь тиждень у вигляді блокцит, один день — один блок."""
-    start_date, end_date = schedule_service.get_week_dates()
-    week_type = i18n.get(f"week-{schedule_service.get_week_type(start_date)}")
+    start_date, _ = get_week_dates()
+    week_type = i18n.get(f"week-{get_week_type(start_date)}")
 
     parts = [
-        i18n.get("week-schedule-header", week_type=week_type, start_date=start_date, end_date=end_date),
+        i18n.get("week-schedule-header", week_type=week_type),
         "",
     ]
     for day, (lessons, day_date) in week_schedule.items():

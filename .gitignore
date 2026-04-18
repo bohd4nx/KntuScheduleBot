@@ -51,3 +51,4 @@ Thumbs.db
 
 # Schedule files
 schedule.json
+/schedules

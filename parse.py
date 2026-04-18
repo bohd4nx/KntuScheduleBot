@@ -2,11 +2,12 @@
 Парсер розкладу ЦНТУ (інтерфейс командного рядка).
 
 Використання:
-    python parse.py                  # завантажити і зберегти всі групи у schedules/
-    python parse.py --list           # вивести список доступних груп
-    python parse.py --group "КН-25"  # зберегти одну конкретну групу
-    python parse.py --db             # зберегти всі групи у БД
-    python parse.py --group "КН-25" --db  # зберегти одну групу у БД
+    python parse.py                      # завантажити і зберегти всі групи у schedules/
+    python parse.py --list               # вивести список доступних груп
+    python parse.py --group "КН-25"      # зберегти одну конкретну групу
+    python parse.py --db                 # зберегти всі групи у БД (з XLS)
+    python parse.py --group "КН-25" --db # зберегти одну групу у БД (з XLS)
+    python parse.py --json schedule.json # зберегти групу у БД з JSON-файлу (зі збереженням посилань)
 """
 
 import argparse
@@ -34,15 +35,30 @@ async def _save_to_db(schedules: dict[str, Any], group: str | None) -> None:
     print(f"Saved {len(targets)} group(s) to DB.")
 
 
+async def _save_json_to_db(path: Path) -> None:
+    with open(path, encoding="utf-8") as f:
+        data = json.load(f)
+    group = data.get("group", path.stem)
+    await init_db()
+    async with SessionLocal() as session:
+        await upsert_group(session, group, data.get("course", ""), data["schedule"])
+    print(f"DB: saved {group} from {path}")
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(
         description="KNTU schedule parser",
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
-    parser.add_argument("--group", metavar="NAME", help="Назва групи для збереження (e.g. 'КН-25')")
-    parser.add_argument("--list", action="store_true", help="Вивести всі доступні групи")
-    parser.add_argument("--db", action="store_true", help="Зберегти розклад у БД")
+    parser.add_argument("--group", metavar="NAME", help="Group name to save (e.g. 'КН-25')")
+    parser.add_argument("--list", action="store_true", help="List all available groups")
+    parser.add_argument("--db", action="store_true", help="Save schedule to DB (from XLS)")
+    parser.add_argument("--json", metavar="FILE", help="Load schedule from JSON file into DB")
     args = parser.parse_args()
+
+    if args.json:
+        asyncio.run(_save_json_to_db(Path(args.json)))
+        return
 
     print("Downloading schedule...")
     schedules = run_parser()
@@ -53,8 +69,7 @@ def main() -> None:
             print(f"  {name} — {schedules[name].get('course', '?')}")
         return
 
-    # Нормалізація групи: «КН-25» -> «КН 25»
-    group: str | None = args.group.strip().replace("-", " ", 1) if args.group else None
+    group: str | None = args.group.strip() if args.group else None
 
     if group and group not in schedules:
         print(f"Group '{args.group}' not found. Run --list to see available groups.", file=sys.stderr)

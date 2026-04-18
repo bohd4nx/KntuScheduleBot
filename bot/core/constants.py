@@ -1,5 +1,5 @@
 from datetime import datetime, timedelta
-from typing import Final
+from typing import Final, Literal
 
 # Дні тижня (використовуються у всьому проєкті)
 DAYS: Final = (
@@ -50,6 +50,24 @@ def _shift(slot: dict[str, str]) -> dict[str, str]:
 
 
 CURATOR_CLASS_TIMES: Final = {k: (_shift(v) if int(k) >= CURATOR_SHIFT_FROM else v) for k, v in REGULAR_CLASS_TIMES.items()}
+
+
+def get_week_type(date: datetime) -> Literal["numerator", "denominator"]:
+    # Семестр стартував на 8-му ISO-тижні (16.02.2026) як чисельник.
+    # 8-й тиждень — парний, тому: парний = чисельник, непарний = знаменник.
+    return "numerator" if date.isocalendar()[1] % 2 == 0 else "denominator"
+
+
+def get_week_monday() -> datetime:
+    today = datetime.now()
+    # Якщо сьогодні субота або неділя — переходимо до наступного понеділка.
+    return today + timedelta(days=7 - today.weekday()) if today.weekday() >= 5 else today - timedelta(days=today.weekday())
+
+
+def get_week_dates() -> tuple[datetime, datetime]:
+    monday = get_week_monday()
+    return monday, monday + timedelta(days=4)
+
 
 # Нормалізація назв днів із XLS (капс -> нормальний регістр)
 PARSER_DAY_ALIASES: Final = {

@@ -4,7 +4,7 @@ start =
     Це бот для перегляду розкладу занять
     <a href="https://kntu.kr.ua/education/hrafik-osvitnoho-protsesu"><b>Центральноукраїнського національного технічного університету.</b></a>
 
-    <tg-emoji emoji-id="5258334872878980409">🎓</tg-emoji> <b>2-й семестр</b>: <code>{ DATETIME($semester_start, dateStyle: "short") } — { DATETIME($semester_end, dateStyle: "short") }</code>
+    <tg-emoji emoji-id="5258334872878980409">🎓</tg-emoji> <b>Семестр</b>: <code>{ DATETIME($semester_start, dateStyle: "short") } — { DATETIME($semester_end, dateStyle: "short") }</code>
 
     <tg-emoji emoji-id="5258503720928288433">ℹ️</tg-emoji> Оберіть тип розкладу нижче.
 
@@ -22,9 +22,6 @@ btn-tomorrow = Завтра
 btn-week = Весь тиждень
 btn-back = Назад
 
-schedule-today = <tg-emoji emoji-id="5258105663359294787">🗓️</tg-emoji> <b>Розклад на сьогодні</b>
-schedule-tomorrow = <tg-emoji emoji-id="5258105663359294787">🗓️</tg-emoji><b>Розклад на завтра</b>
-schedule-week = <tg-emoji emoji-id="5258105663359294787">🗓️</tg-emoji> <b>Розклад на тиждень</b>
 
 no-lessons-today = <tg-emoji emoji-id="5456523939729645585">🎉</tg-emoji> Сьогодні пар немає! Відпочивай!
 no-lessons-tomorrow = <tg-emoji emoji-id="5453908682603503941">🥂</tg-emoji> Завтра пар немає! Вихідний!
@@ -48,6 +45,6 @@ online-link = <b>Посилання:</b> <a href="{$url}">підключитис
 week-numerator = Чисельник
 week-denominator = Знаменник
 curator-hour = — Кураторська година ❗️
-week-schedule-header = <tg-emoji emoji-id="5258334872878980409">🗓️</tg-emoji> <b>Розклад на тиждень ({ DATETIME($start_date, dateStyle: "short") } — { DATETIME($end_date, dateStyle: "short") })</b> — {$week_type}
+week-schedule-header = <tg-emoji emoji-id="5258334872878980409">🗓️</tg-emoji> <b>Розклад на тиждень ({$week_type})</b>
 day-schedule = <tg-emoji emoji-id="5258105663359294787">🗓️</tg-emoji> <b>{$day} ({ DATETIME($date, dateStyle: "short") })</b> — {$week_type} 
 week-day-header = <tg-emoji emoji-id="5258105663359294787">🗓️</tg-emoji> <b>{$day} ({ DATETIME($date, dateStyle: "short") })</b>

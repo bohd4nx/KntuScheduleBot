@@ -30,8 +30,16 @@ def clean_multiline(value: str) -> str:
 
 
 def normalize_group_names(raw: str) -> list[str]:
-    """Розбиває «КБ 25(30), КІ 25(9)» -> ['КБ 25', 'КІ 25']."""
-    return [name for part in raw.split(",") if (name := compact_spaces(re.sub(r"\(\d+\)", "", part)))]
+    """Розбиває «КБ 25(30), КІ 22-1(9)» -> ['КБ-25', 'КІ-22 (1)']."""
+    names = [name for part in raw.split(",") if (name := compact_spaces(re.sub(r"\(\d+\)", "", part)))]
+    result = []
+    for name in names:
+        # «КН 25» -> «КН-25»
+        name = re.sub(r"(?<=[А-ЯІЇЄҐа-яіїєґA-Za-z])\s+(?=\d)", "-", name)
+        # «КІ-22-1» -> «КІ-22 (1)»
+        name = re.sub(r"(?<=\d)-(\d+)$", r" (\1)", name)
+        result.append(name)
+    return result
 
 
 def course_from_group_name(group: str, enrollment_year: int = 2025) -> str | None:
