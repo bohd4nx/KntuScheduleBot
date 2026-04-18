@@ -19,6 +19,9 @@ dependencies = [
 [project.optional-dependencies]
 dev = ["ruff", "mypy", "types-xlrd"]
 
+[tool.setuptools.packages.find]
+include = ["bot*"]
+
 [tool.ruff]
 line-length = 128
 target-version = "py312"
