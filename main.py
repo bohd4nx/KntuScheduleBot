@@ -12,7 +12,7 @@ from bot.core import DEFAULT_LOCALE, config, logger, setup_logging
 from bot.handlers import menu, schedule
 
 
-async def set_bot_commands(bot: Bot) -> None:
+async def _setup_bot_info(bot: Bot) -> None:
     commands: list[BotCommand] = [
         BotCommand(command="start", description="🏠 Головне меню"),
         BotCommand(command="today", description="🗓️  Розклад на сьогодні"),
@@ -21,6 +21,17 @@ async def set_bot_commands(bot: Bot) -> None:
         BotCommand(command="help", description="❓ Як користуватися"),
     ]
     await bot.set_my_commands(commands)
+
+    await bot.set_my_name("ЦНТУ | Розклад занять")
+
+    await bot.set_my_description(
+        "📅 Актуальний розклад занять для студентів кафедри кібербезпеки та програмного забезпечення ЦНТУ.\n\n"
+        "• Розклад на сьогодні, завтра або весь тиждень\n"
+        "• Автоматичне визначення типу тижня (чисельник / знаменник)\n"
+        "• Посилання на онлайн-заняття прямо в повідомленні"
+    )
+
+    await bot.set_my_short_description("Розклад занять для кафедри кібербезпеки та програмного забезпечення ЦНТУ")
 
 
 async def main() -> None:
@@ -31,7 +42,7 @@ async def main() -> None:
         default=DefaultBotProperties(parse_mode=ParseMode.HTML, link_preview_is_disabled=True),
     )
 
-    await set_bot_commands(bot)
+    await _setup_bot_info(bot)
 
     i18n_core = FluentCompileCore(path="locales/{locale}")
     await i18n_core.startup()
