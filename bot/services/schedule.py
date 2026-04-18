@@ -28,9 +28,7 @@ class ScheduleService:
         # тому парний ISO тиждень = чисельник, непарний = знаменник (інверсія від наївного % 2 == 1)
         return "numerator" if date.isocalendar()[1] % 2 == 0 else "denominator"
 
-    def get_day_schedule(
-        self, day: str, week_type: Literal["numerator", "denominator"] | None = None
-    ) -> list[Lesson]:
+    def get_day_schedule(self, day: str, week_type: Literal["numerator", "denominator"] | None = None) -> list[Lesson]:
         week_type = week_type or self.get_week_type(datetime.now())
         day_data = self._schedule_data["schedule"].get(day, {})
 
@@ -68,15 +66,15 @@ class ScheduleService:
         week_type = self.get_week_type(tomorrow)
         return tomorrow_day, self.get_day_schedule(tomorrow_day, week_type), tomorrow
 
+    @staticmethod
+    def _get_week_monday() -> datetime:
+        today = datetime.now()
+        return today + timedelta(days=7 - today.weekday()) if today.weekday() >= 5 else today - timedelta(days=today.weekday())
+
     def get_week_schedule(
         self, week_type: Literal["numerator", "denominator"] | None = None
     ) -> dict[str, tuple[list[Lesson], datetime]]:
-        today = datetime.now()
-        monday = (
-            today + timedelta(days=7 - today.weekday())
-            if today.weekday() >= 5
-            else today - timedelta(days=today.weekday())
-        )
+        monday = self._get_week_monday()
         week_type = week_type or self.get_week_type(monday)
         schedule: dict[str, tuple[list[Lesson], datetime]] = {}
         for day_index, day in enumerate(WORK_DAYS):
@@ -87,14 +85,8 @@ class ScheduleService:
 
         return schedule
 
-    @staticmethod
-    def get_week_dates() -> tuple[datetime, datetime]:
-        today = datetime.now()
-        monday = (
-            today + timedelta(days=7 - today.weekday())
-            if today.weekday() >= 5
-            else today - timedelta(days=today.weekday())
-        )
+    def get_week_dates(self) -> tuple[datetime, datetime]:
+        monday = self._get_week_monday()
         friday = monday + timedelta(days=4)
         return monday, friday
 

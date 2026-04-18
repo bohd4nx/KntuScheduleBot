@@ -1,4 +1,4 @@
-from .menu import get_main_menu_keyboard, get_back_keyboard
+from .menu import get_back_keyboard, get_main_menu_keyboard
 
 __all__ = [
     "get_main_menu_keyboard",

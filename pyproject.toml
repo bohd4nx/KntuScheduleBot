@@ -1,0 +1,30 @@
+[project]
+name = "kntu-schedule-bot"
+version = "2026.1.0"
+description = "Telegram bot for KNTU schedule"
+requires-python = ">=3.12"
+authors = [{ name = "bohd4nx" }]
+dependencies = [
+    "aiogram[i18n]>=3.23.0",
+    "aiogram_i18n>=1.4",
+    "fluent_compiler>=1.1",
+    "python-dotenv>=1.1.0",
+]
+
+[project.optional-dependencies]
+dev = ["ruff", "mypy"]
+
+[tool.ruff]
+line-length = 128
+target-version = "py312"
+
+[tool.ruff.lint]
+# E — pycodestyle errors, F — pyflakes, W — warnings, I — isort, UP — pyupgrade
+select = ["E", "F", "W", "I", "UP"]
+# E501 — line too long (covered by line-length above)
+ignore = ["E501"]
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+explicit_package_bases = true

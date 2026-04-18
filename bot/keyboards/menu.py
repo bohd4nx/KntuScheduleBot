@@ -1,4 +1,4 @@
-from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
+from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 from aiogram_i18n import I18nContext
 
 
@@ -28,9 +28,7 @@ def get_main_menu_keyboard(i18n: I18nContext) -> InlineKeyboardMarkup:
     return InlineKeyboardMarkup(inline_keyboard=buttons)
 
 
-def get_back_keyboard(
-    i18n: I18nContext, target: str = "back_to_menu"
-) -> InlineKeyboardMarkup:
+def get_back_keyboard(i18n: I18nContext, target: str = "back_to_menu") -> InlineKeyboardMarkup:
     return InlineKeyboardMarkup(
         inline_keyboard=[
             [

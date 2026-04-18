@@ -7,8 +7,8 @@ from aiogram.types import BotCommand
 from aiogram_i18n import I18nMiddleware
 from aiogram_i18n.cores.fluent_compile_core import FluentCompileCore
 
-from bot.commands import start_router, help_router, schedule_router
-from bot.core import config, logger, setup_logging, DEFAULT_LOCALE
+from bot.commands import help_router, schedule_router, start_router
+from bot.core import DEFAULT_LOCALE, config, logger, setup_logging
 from bot.handlers import menu, schedule
 
 
@@ -28,9 +28,7 @@ async def main() -> None:
 
     bot = Bot(
         token=config.BOT_TOKEN,
-        default=DefaultBotProperties(
-            parse_mode=ParseMode.HTML, link_preview_is_disabled=True
-        ),
+        default=DefaultBotProperties(parse_mode=ParseMode.HTML, link_preview_is_disabled=True),
     )
 
     await set_bot_commands(bot)
@@ -71,4 +69,4 @@ if __name__ == "__main__":
     except (KeyboardInterrupt, SystemExit):
         pass
     except Exception as exc:
-        logger.exception(f"Unexpected error: {exc}")
+        logger.exception("Unexpected error: %s", exc)

@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta
 
-from aiogram import Router, F
-from aiogram.types import CallbackQuery
+from aiogram import F, Router
+from aiogram.types import CallbackQuery, Message
 from aiogram_i18n import I18nContext
 
 from bot.core import config
@@ -14,6 +14,8 @@ router = Router(name=__name__)
 
 @router.callback_query(F.data == "schedule_today")
 async def schedule_today_callback(callback: CallbackQuery, i18n: I18nContext) -> None:
+    if not isinstance(callback.message, Message):
+        return
     if datetime.now() < config.SEMESTER_START_DATE:
         await callback.answer(i18n.get("alert-semester-not-started"), show_alert=True)
         return
@@ -32,9 +34,9 @@ async def schedule_today_callback(callback: CallbackQuery, i18n: I18nContext) ->
 
 
 @router.callback_query(F.data == "schedule_tomorrow")
-async def schedule_tomorrow_callback(
-    callback: CallbackQuery, i18n: I18nContext
-) -> None:
+async def schedule_tomorrow_callback(callback: CallbackQuery, i18n: I18nContext) -> None:
+    if not isinstance(callback.message, Message):
+        return
     if datetime.now() + timedelta(days=1) < config.SEMESTER_START_DATE:
         await callback.answer(i18n.get("alert-semester-not-started"), show_alert=True)
         return
@@ -54,12 +56,12 @@ async def schedule_tomorrow_callback(
 
 @router.callback_query(F.data == "schedule_week")
 async def schedule_week_callback(callback: CallbackQuery, i18n: I18nContext) -> None:
+    if not isinstance(callback.message, Message):
+        return
     if datetime.now() < config.SEMESTER_START_DATE:
         await callback.answer(i18n.get("alert-semester-not-started"), show_alert=True)
         return
 
     week_schedule = schedule_service.get_week_schedule()
-    await callback.message.edit_text(
-        format_week_schedule(i18n, week_schedule), reply_markup=get_back_keyboard(i18n)
-    )
+    await callback.message.edit_text(format_week_schedule(i18n, week_schedule), reply_markup=get_back_keyboard(i18n))
     await callback.answer()
