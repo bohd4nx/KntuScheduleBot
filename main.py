@@ -42,7 +42,7 @@ async def main() -> None:
         default=DefaultBotProperties(parse_mode=ParseMode.HTML, link_preview_is_disabled=True),
     )
 
-    await _setup_bot_info(bot)
+    # await _setup_bot_info(bot)
 
     i18n_core = FluentCompileCore(path="locales/{locale}")
     await i18n_core.startup()
