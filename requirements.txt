@@ -1,3 +1,0 @@
-# Install via: pip install -e .[dev]
-# Dependencies are defined in pyproject.toml
--e .
