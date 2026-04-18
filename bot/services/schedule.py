@@ -27,9 +27,9 @@ class ScheduleService:
         return rows
 
     async def get_today_schedule(self, session: AsyncSession) -> tuple[str, list[Lesson], datetime]:
-        now = datetime.now()
-        day = DAYS[now.weekday()]
-        return day, await self.get_day_schedule(session, day), now
+        today = datetime.now()
+        day = DAYS[today.weekday()]
+        return day, await self.get_day_schedule(session, day), today
 
     async def get_tomorrow_schedule(self, session: AsyncSession) -> tuple[str, list[Lesson], datetime]:
         tomorrow = datetime.now() + timedelta(days=1)

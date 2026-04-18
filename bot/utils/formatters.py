@@ -39,13 +39,21 @@ def _format_lesson(i18n: I18nContext, lesson: Lesson, curator_day: bool = False)
     )
 
 
-def format_day_schedule(i18n: I18nContext, day: str, lessons: list[Lesson], date: datetime) -> str:
+def format_day_schedule(
+    i18n: I18nContext,
+    day: str,
+    lessons: list[Lesson],
+    date: datetime,
+    holiday_name: str | None = None,
+) -> str:
     """Форматує розклад на один день."""
     week_type = i18n.get(f"week-{get_week_type(date)}")
     curator_day = _is_curator_day(date)
     header = i18n.get("day-schedule", day=day, week_type=week_type, date=date)
     if curator_day:
         header += f" {i18n.get('curator-hour')}"
+    if holiday_name:
+        header += f" {i18n.get('possible-holiday', holiday=holiday_name)}"
     parts = [header, ""]
     for i, lesson in enumerate(lessons):
         parts.append(_format_lesson(i18n, lesson, curator_day))
@@ -54,7 +62,11 @@ def format_day_schedule(i18n: I18nContext, day: str, lessons: list[Lesson], date
     return "\n".join(parts)
 
 
-def format_week_schedule(i18n: I18nContext, week_schedule: dict[str, tuple[list[Lesson], datetime]]) -> str:
+def format_week_schedule(
+    i18n: I18nContext,
+    week_schedule: dict[str, tuple[list[Lesson], datetime]],
+    holiday_names: dict[datetime, str] | None = None,
+) -> str:
     """Форматує розклад на весь тиждень у вигляді блокцит, один день — один блок."""
     start_date, _ = get_week_dates()
     week_type = i18n.get(f"week-{get_week_type(start_date)}")
@@ -67,7 +79,10 @@ def format_week_schedule(i18n: I18nContext, week_schedule: dict[str, tuple[list[
         curator_day = _is_curator_day(day_date)
         header = i18n.get("week-day-header", day=day, date=day_date)
         if curator_day:
-            header += f" {i18n.get('curator-hour')}"
+            header += f" {i18n.get('curator-hour-week')}"
+        holiday = (holiday_names or {}).get(day_date)
+        if holiday:
+            header += f" {i18n.get('possible-holiday-week', holiday=holiday)}"
         parts.append(header)
         lessons_text = "\n\n".join(_format_lesson(i18n, lesson, curator_day) for lesson in lessons)
         parts.append(f"<blockquote expandable>{lessons_text}</blockquote>")

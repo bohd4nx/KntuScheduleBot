@@ -44,7 +44,11 @@ online-link = <b>Посилання:</b> <a href="{$url}">підключитис
 
 week-numerator = Чисельник
 week-denominator = Знаменник
-curator-hour = — Кураторська година ❗️
+curator-hour = <b>(Кураторська година)</b> ❗️
+curator-hour-week = — <b>Кураторська година</b> ❗️ 
+possible-holiday = <b>({$holiday})</b>
+possible-holiday-week = — <b>{$holiday}</b> ❗️
+
 week-schedule-header = <tg-emoji emoji-id="5258334872878980409">🗓️</tg-emoji> <b>Розклад на тиждень ({$week_type})</b>
 day-schedule = <tg-emoji emoji-id="5258105663359294787">🗓️</tg-emoji> <b>{$day} ({ DATETIME($date, dateStyle: "short") })</b> — {$week_type} 
 week-day-header = <tg-emoji emoji-id="5258105663359294787">🗓️</tg-emoji> <b>{$day} ({ DATETIME($date, dateStyle: "short") })</b>
