@@ -2,26 +2,32 @@ from datetime import datetime
 
 from aiogram_i18n import I18nContext
 
+from bot.core.constants import CURATOR_CLASS_TIMES, CURATOR_HOUR_DATES, DATE_FORMAT, REGULAR_CLASS_TIMES
+from bot.database.models.lesson import Lesson
 from bot.services import schedule_service
-from bot.services.schedule import Lesson
 
 
-def _format_lesson(i18n: I18nContext, lesson: Lesson) -> str:
+def _is_curator_day(date: datetime) -> bool:
+    """Перевіряє, чи є дана дата кураторською годиною."""
+    return date.strftime(DATE_FORMAT) in CURATOR_HOUR_DATES
+
+
+def _format_lesson(i18n: I18nContext, lesson: Lesson, curator_day: bool = False) -> str:
     """Форматує одну пару в локалізований рядок."""
-    teachers_count = len(lesson["teacher"].split(", "))
+    teachers_count = len(lesson.teacher.split(", "))
+    times = (CURATOR_CLASS_TIMES if curator_day else REGULAR_CLASS_TIMES).get(lesson.lesson_number, {})
 
     # Спортзал виводиться інакше, будь-яка інша аудиторія — зі знаком кімнати.
-    room_display = {"Спортзал": i18n.get("room-gym")}.get(lesson["room"], i18n.get("room-regular", room=lesson["room"]))
-
-    online_link_display = f"{i18n.get('online-link', url=lesson['online_link'])}\n" if lesson.get("online_link") else ""
+    room_display = {"Спортзал": i18n.get("room-gym")}.get(lesson.room, i18n.get("room-regular", room=lesson.room))
+    online_link_display = f"{i18n.get('online-link', url=lesson.online_link)}\n" if lesson.online_link else ""
 
     return i18n.get(
         "lesson-item",
-        number=lesson["number"],
-        subject=lesson["subject"],
-        time=f"{lesson['start']} – {lesson['end']}",
+        number=lesson.lesson_number,
+        subject=lesson.subject,
+        time=f"{times.get('start', '')} – {times.get('end', '')}",
         teachers_count=teachers_count,
-        teacher=lesson["teacher"],
+        teacher=lesson.teacher,
         room_display=room_display,
         online_link_display=online_link_display,
     )
@@ -30,14 +36,15 @@ def _format_lesson(i18n: I18nContext, lesson: Lesson) -> str:
 def format_day_schedule(i18n: I18nContext, day: str, lessons: list[Lesson], date: datetime) -> str:
     """Форматує розклад на один день."""
     week_type = i18n.get(f"week-{schedule_service.get_week_type(date)}")
-
-    parts = [i18n.get("day-schedule", day=day, week_type=week_type, date=date), ""]
-
+    curator_day = _is_curator_day(date)
+    header = i18n.get("day-schedule", day=day, week_type=week_type, date=date)
+    if curator_day:
+        header += f" {i18n.get('curator-hour')}"
+    parts = [header, ""]
     for i, lesson in enumerate(lessons):
-        parts.append(_format_lesson(i18n, lesson))
+        parts.append(_format_lesson(i18n, lesson, curator_day))
         if i < len(lessons) - 1:
             parts.append("")
-
     return "\n".join(parts)
 
 
@@ -47,21 +54,17 @@ def format_week_schedule(i18n: I18nContext, week_schedule: dict[str, tuple[list[
     week_type = i18n.get(f"week-{schedule_service.get_week_type(start_date)}")
 
     parts = [
-        i18n.get(
-            "week-schedule-header",
-            week_type=week_type,
-            start_date=start_date,
-            end_date=end_date,
-        ),
+        i18n.get("week-schedule-header", week_type=week_type, start_date=start_date, end_date=end_date),
         "",
     ]
-
     for day, (lessons, day_date) in week_schedule.items():
-        parts.append(i18n.get("week-day-header", day=day, date=day_date))
-
-        lessons_text = "\n\n".join(_format_lesson(i18n, lesson) for lesson in lessons)
-        blockquote = f"<blockquote expandable>{lessons_text}</blockquote>"
-        parts.append(blockquote)
+        curator_day = _is_curator_day(day_date)
+        header = i18n.get("week-day-header", day=day, date=day_date)
+        if curator_day:
+            header += f" {i18n.get('curator-hour')}"
+        parts.append(header)
+        lessons_text = "\n\n".join(_format_lesson(i18n, lesson, curator_day) for lesson in lessons)
+        parts.append(f"<blockquote expandable>{lessons_text}</blockquote>")
         parts.append("")
 
     return "\n".join(parts)

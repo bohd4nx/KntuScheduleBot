@@ -5,15 +5,33 @@
     python parse.py                  # завантажити і зберегти всі групи у schedules/
     python parse.py --list           # вивести список доступних груп
     python parse.py --group "КН-25"  # зберегти одну конкретну групу
-    python parse.py --out /tmp/out   # вказати вихідну директорію
+    python parse.py --db             # зберегти всі групи у БД
+    python parse.py --group "КН-25" --db  # зберегти одну групу у БД
 """
 
 import argparse
+import asyncio
 import json
 import sys
 from pathlib import Path
+from typing import Any
 
+from bot.database import init_db
+from bot.database.base import SessionLocal
+from bot.database.crud import upsert_group
 from bot.services import run_parser, save_schedules
+
+OUTPUT_DIR = Path(__file__).resolve().parent / "schedules"
+
+
+async def _save_to_db(schedules: dict[str, Any], group: str | None) -> None:
+    await init_db()
+    targets = {group: schedules[group]} if group else schedules
+    async with SessionLocal() as session:
+        for name, data in targets.items():
+            await upsert_group(session, name, data.get("course", ""), data["schedule"])
+            print(f"  DB: saved {name}")
+    print(f"Saved {len(targets)} group(s) to DB.")
 
 
 def main() -> None:
@@ -23,12 +41,7 @@ def main() -> None:
     )
     parser.add_argument("--group", metavar="NAME", help="Назва групи для збереження (e.g. 'КН-25')")
     parser.add_argument("--list", action="store_true", help="Вивести всі доступні групи")
-    parser.add_argument(
-        "--out",
-        metavar="DIR",
-        default="schedules",
-        help="Вихідна директорія (default: schedules/)",
-    )
+    parser.add_argument("--db", action="store_true", help="Зберегти розклад у БД")
     args = parser.parse_args()
 
     print("Downloading schedule...")
@@ -40,16 +53,21 @@ def main() -> None:
             print(f"  {name} — {schedules[name].get('course', '?')}")
         return
 
-    if args.group:
-        # Приймаємо і «КН-25», і «КН 25» — нормалізуємо до пробілу.
-        group = args.group.strip().replace("-", " ", 1)
-        data = schedules.get(group)
-        if data is None:
-            print(f"Group '{args.group}' not found. Run --list to see available groups.", file=sys.stderr)
-            sys.exit(1)
+    # Нормалізація групи: «КН-25» -> «КН 25»
+    group: str | None = args.group.strip().replace("-", " ", 1) if args.group else None
 
+    if group and group not in schedules:
+        print(f"Group '{args.group}' not found. Run --list to see available groups.", file=sys.stderr)
+        sys.exit(1)
+
+    if args.db:
+        asyncio.run(_save_to_db(schedules, group))
+        return
+
+    if group:
+        data = schedules[group]
         safe = group.replace(" ", "-").replace("/", "-").replace("'", "")
-        out_file = Path(args.out) / f"{safe}.json"
+        out_file = OUTPUT_DIR / f"{safe}.json"
         out_file.parent.mkdir(parents=True, exist_ok=True)
         payload = {"group": group, "course": data.get("course", ""), "schedule": data["schedule"]}
         with open(out_file, "w", encoding="utf-8") as f:
@@ -57,7 +75,7 @@ def main() -> None:
         print(f"Saved to {out_file}")
         return
 
-    save_schedules(schedules, Path(args.out))
+    save_schedules(schedules, OUTPUT_DIR)
 
 
 if __name__ == "__main__":

@@ -9,7 +9,9 @@ from aiogram_i18n.cores.fluent_compile_core import FluentCompileCore
 
 from bot.commands import help_router, schedule_router, start_router
 from bot.core import DEFAULT_LOCALE, config, logger, setup_logging
+from bot.database import init_db
 from bot.handlers import menu, schedule
+from bot.middlewares import DatabaseMiddleware
 
 
 async def _setup_bot_info(bot: Bot) -> None:
@@ -37,6 +39,8 @@ async def _setup_bot_info(bot: Bot) -> None:
 async def main() -> None:
     setup_logging()
 
+    await init_db()
+
     bot = Bot(
         token=config.BOT_TOKEN,
         default=DefaultBotProperties(parse_mode=ParseMode.HTML, link_preview_is_disabled=True),
@@ -60,6 +64,8 @@ async def main() -> None:
         dp.include_router(router)
 
     i18n.setup(dispatcher=dp)
+
+    dp.update.middleware(DatabaseMiddleware())
 
     try:
         await dp.start_polling(

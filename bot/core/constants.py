@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 from typing import Final
 
 # Дні тижня (використовуються у всьому проєкті)
@@ -12,29 +12,14 @@ DAYS: Final = (
     "Неділя",
 )
 
-# Робочі дні (просто перші 5 днів з DAYS)
 WORK_DAYS: Final = DAYS[:5]
-
-# Основна локаль бота (поки тільки українська)
 DEFAULT_LOCALE: Final = "uk"
-
-# Формат дат, який використовується у всьому проєкті
 DATE_FORMAT: Final = "%d.%m.%Y"
 
+SEMESTER_START_DATE: Final = datetime.strptime("16.02.2026", DATE_FORMAT)
+SEMESTER_END_DATE: Final = datetime.strptime("01.07.2026", DATE_FORMAT)
 
-# Парсимо дати один раз, щоб не повторювати datetime.strptime
-def _parse(date: str) -> datetime:
-    return datetime.strptime(date, DATE_FORMAT)
-
-
-# Дата початку семестру
-SEMESTER_START_DATE: Final = _parse("16.02.2026")
-
-# Дата кінця семестру
-SEMESTER_END_DATE: Final = _parse("01.07.2026")
-
-
-# Дати, коли є кураторська година (у форматі рядків)
+# Дати кураторських годин
 CURATOR_HOUR_DATES: Final = (
     "03.03.2026",
     "07.04.2026",
@@ -42,8 +27,6 @@ CURATOR_HOUR_DATES: Final = (
     "02.06.2026",
 )
 
-
-# Стандартний розклад пар (звичайний день)
 REGULAR_CLASS_TIMES: Final = {
     "1": {"start": "08:30", "end": "09:50"},
     "2": {"start": "10:00", "end": "11:20"},
@@ -53,18 +36,22 @@ REGULAR_CLASS_TIMES: Final = {
     "6": {"start": "16:20", "end": "17:40"},
 }
 
-# Розклад у день куратора (після нього все трохи зсувається)
-# Можна було б робити динамічно, але поки залишаємо як є
-CURATOR_CLASS_TIMES: Final = {
-    "1": {"start": "08:30", "end": "09:50"},
-    "2": {"start": "10:00", "end": "11:20"},
-    "3": {"start": "12:10", "end": "13:30"},
-    "4": {"start": "14:00", "end": "15:20"},
-    "5": {"start": "15:30", "end": "16:50"},
-    "6": {"start": "17:00", "end": "18:20"},
-}
+# З 3-ї пари розклад зсувається на 40 хв через кураторську годину.
+CURATOR_SHIFT_FROM = 3
+CURATOR_DELTA = timedelta(minutes=40)
 
-# Нормалізація назв днів (бо в XLS вони капсом)
+
+def _shift(slot: dict[str, str]) -> dict[str, str]:
+    fmt = "%H:%M"
+    return {
+        "start": (datetime.strptime(slot["start"], fmt) + CURATOR_DELTA).strftime(fmt),
+        "end": (datetime.strptime(slot["end"], fmt) + CURATOR_DELTA).strftime(fmt),
+    }
+
+
+CURATOR_CLASS_TIMES: Final = {k: (_shift(v) if int(k) >= CURATOR_SHIFT_FROM else v) for k, v in REGULAR_CLASS_TIMES.items()}
+
+# Нормалізація назв днів із XLS (капс -> нормальний регістр)
 PARSER_DAY_ALIASES: Final = {
     "ПОНЕДІЛОК": "Понеділок",
     "ВІВТОРОК": "Вівторок",
@@ -73,7 +60,7 @@ PARSER_DAY_ALIASES: Final = {
     "П'ЯТНИЦЯ": "П'ятниця",
 }
 
-# Визначення курсу по заголовку (типу "ТРЕТІЙ КУРС")
+# Визначення курсу із заголовка XLS («ТРЕТІЙ КУРС» -> '3 курс')
 PARSER_COURSE_LABELS: Final = {
     "ПЕРШИЙ": "1 курс",
     "ДРУГИЙ": "2 курс",

@@ -30,19 +30,19 @@ def clean_multiline(value: str) -> str:
 
 
 def normalize_group_names(raw: str) -> list[str]:
-    """Розбиває «КБ 25(30), КІ 25(9)» → ['КБ 25', 'КІ 25']."""
+    """Розбиває «КБ 25(30), КІ 25(9)» -> ['КБ 25', 'КІ 25']."""
     return [name for part in raw.split(",") if (name := compact_spaces(re.sub(r"\(\d+\)", "", part)))]
 
 
 def course_from_group_name(group: str, enrollment_year: int = 2025) -> str | None:
-    """Визначає курс за роком вступу в назві групи ('КН 25' → '1 курс')."""
+    """Визначає курс за роком вступу в назві групи ('КН 25' -> '1 курс')."""
     m = re.search(r"(?<!\d)(\d{2})(?!\d)", group)
     course = enrollment_year - (2000 + int(m.group(1))) + 1 if m else None
     return f"{course} курс" if course and 1 <= course <= 6 else None
 
 
 def course_from_header(header: str) -> str | None:
-    """Визначає курс із заголовка XLS ('ПЕРШИЙ КУРС' → '1 курс')."""
+    """Визначає курс із заголовка XLS ('ПЕРШИЙ КУРС' -> '1 курс')."""
     upper = header.upper()
     found = next((label for marker, label in PARSER_COURSE_LABELS.items() if marker in upper), None)
     return found or ("Аспірантура" if "АСПІРАНТ" in upper else None)
@@ -83,7 +83,7 @@ def _from_1(lines: list[str]) -> tuple[str, str, str]:
     return subject, teacher, room
 
 
-# Диспетчер рядкових обробників (fallback → _from_3 для 3+ рядків).
+# Диспетчер рядкових обробників (fallback -> _from_3 для 3+ рядків).
 LINE_PARSERS: dict[int, Any] = {1: _from_1, 2: _from_2}
 
 

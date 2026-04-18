@@ -29,8 +29,6 @@ class SheetView:
 
 
 class ScheduleParser:
-    """Парсер повного розкладу ЦНТУ у форматі XLS. Повертає словник груп."""
-
     LESSONS_PER_DAY = 6
 
     def __init__(self, view: SheetView) -> None:
