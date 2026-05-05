@@ -1,0 +1,14 @@
+services:
+  bot:
+    container_name: kntu-schedule-bot
+    image: kntu-schedule-bot
+    build: .
+    restart: unless-stopped
+    env_file:
+    - .env
+    networks:
+    - bot_network
+
+networks:
+  bot_network:
+    external: true

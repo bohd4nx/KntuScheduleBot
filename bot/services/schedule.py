@@ -3,8 +3,8 @@ from typing import Literal
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from bot.core import DAYS, WORK_DAYS, config
-from bot.core.constants import get_week_monday, get_week_type
+from bot.core import config
+from bot.core.constants import DAYS, WORK_DAYS, get_week_monday, get_week_type
 from bot.database.crud import get_lessons
 from bot.database.models import Lesson
 

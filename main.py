@@ -38,7 +38,6 @@ async def _setup_bot_info(bot: Bot) -> None:
 
 async def main() -> None:
     setup_logging()
-
     await init_db()
 
     bot = Bot(
@@ -53,28 +52,12 @@ async def main() -> None:
     i18n = I18nMiddleware(core=i18n_core, default_locale=DEFAULT_LOCALE)
 
     dp = Dispatcher()
-
-    for router in [
-        start_router,
-        help_router,
-        schedule_router,
-        menu.router,
-        schedule.router,
-    ]:
-        dp.include_router(router)
-
+    dp.include_routers(start_router, help_router, schedule_router, menu.router, schedule.router)
     i18n.setup(dispatcher=dp)
-
     dp.update.middleware(DatabaseMiddleware())
 
     try:
-        await dp.start_polling(
-            bot,
-            polling_timeout=30,
-            handle_as_tasks=True,
-            tasks_concurrency_limit=100,
-            close_bot_session=True,
-        )
+        await dp.start_polling(bot, close_bot_session=True)
     finally:
         await i18n.core.shutdown()
         await close_db()
