@@ -4,7 +4,7 @@ from aiogram import F, Router
 from aiogram.types import CallbackQuery, Message
 from aiogram_i18n import I18nContext
 
-from bot.core import config
+from bot.core.constants import SEMESTER_END_DATE, SEMESTER_START_DATE
 from bot.keyboards import get_main_menu_keyboard
 
 router = Router(name=__name__)
@@ -20,8 +20,8 @@ async def back_to_menu_callback(callback: CallbackQuery, i18n: I18nContext) -> N
         i18n.get(
             "start",
             name=name,
-            semester_start=config.SEMESTER_START_DATE,
-            semester_end=config.SEMESTER_END_DATE,
+            semester_start=SEMESTER_START_DATE,
+            semester_end=SEMESTER_END_DATE,
         ),
         reply_markup=get_main_menu_keyboard(i18n),
     )

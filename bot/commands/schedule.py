@@ -6,9 +6,8 @@ from aiogram.types import Message
 from aiogram_i18n import I18nContext
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from bot.core import config
-from bot.services.holidays import holiday_service
-from bot.services.schedule import schedule_service
+from bot.core.constants import SEMESTER_START_DATE
+from bot.services import holiday_service, schedule_service
 from bot.utils import format_day_schedule, format_week_schedule
 
 router = Router(name=__name__)
@@ -16,7 +15,7 @@ router = Router(name=__name__)
 
 @router.message(Command("today"))
 async def today_command(message: Message, i18n: I18nContext, session: AsyncSession) -> None:
-    if datetime.now() < config.SEMESTER_START_DATE:
+    if datetime.now() < SEMESTER_START_DATE:
         await message.answer(i18n.get("semester-not-started"))
         return
 
@@ -33,7 +32,7 @@ async def today_command(message: Message, i18n: I18nContext, session: AsyncSessi
 
 @router.message(Command("tomorrow"))
 async def tomorrow_command(message: Message, i18n: I18nContext, session: AsyncSession) -> None:
-    if datetime.now() + timedelta(days=1) < config.SEMESTER_START_DATE:
+    if datetime.now() + timedelta(days=1) < SEMESTER_START_DATE:
         await message.answer(i18n.get("semester-not-started"))
         return
 
@@ -50,7 +49,7 @@ async def tomorrow_command(message: Message, i18n: I18nContext, session: AsyncSe
 
 @router.message(Command("week"))
 async def week_command(message: Message, i18n: I18nContext, session: AsyncSession) -> None:
-    if datetime.now() < config.SEMESTER_START_DATE:
+    if datetime.now() < SEMESTER_START_DATE:
         await message.answer(i18n.get("semester-not-started"))
         return
 

@@ -22,7 +22,6 @@ btn-tomorrow = Завтра
 btn-week = Весь тиждень
 btn-back = Назад
 
-
 no-lessons-today = <tg-emoji emoji-id="5456523939729645585">🎉</tg-emoji> Сьогодні пар немає! Відпочивай!
 no-lessons-tomorrow = <tg-emoji emoji-id="5453908682603503941">🥂</tg-emoji> Завтра пар немає! Вихідний!
 semester-not-started = <tg-emoji emoji-id="5258262708838472996">🙃</tg-emoji> Навчання ще не почалось! Відпочиваємо!

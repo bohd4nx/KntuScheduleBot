@@ -5,10 +5,9 @@ from aiogram.types import CallbackQuery, Message
 from aiogram_i18n import I18nContext
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from bot.core import config
+from bot.core.constants import SEMESTER_START_DATE
 from bot.keyboards import get_back_keyboard
-from bot.services.holidays import holiday_service
-from bot.services.schedule import schedule_service
+from bot.services import holiday_service, schedule_service
 from bot.utils import format_day_schedule, format_week_schedule
 
 router = Router(name=__name__)
@@ -18,7 +17,7 @@ router = Router(name=__name__)
 async def schedule_today_callback(callback: CallbackQuery, i18n: I18nContext, session: AsyncSession) -> None:
     if not isinstance(callback.message, Message):
         return
-    if datetime.now() < config.SEMESTER_START_DATE:
+    if datetime.now() < SEMESTER_START_DATE:
         await callback.answer(i18n.get("alert-semester-not-started"), show_alert=True)
         return
 
@@ -41,7 +40,7 @@ async def schedule_today_callback(callback: CallbackQuery, i18n: I18nContext, se
 async def schedule_tomorrow_callback(callback: CallbackQuery, i18n: I18nContext, session: AsyncSession) -> None:
     if not isinstance(callback.message, Message):
         return
-    if datetime.now() + timedelta(days=1) < config.SEMESTER_START_DATE:
+    if datetime.now() + timedelta(days=1) < SEMESTER_START_DATE:
         await callback.answer(i18n.get("alert-semester-not-started"), show_alert=True)
         return
 
@@ -64,7 +63,7 @@ async def schedule_tomorrow_callback(callback: CallbackQuery, i18n: I18nContext,
 async def schedule_week_callback(callback: CallbackQuery, i18n: I18nContext, session: AsyncSession) -> None:
     if not isinstance(callback.message, Message):
         return
-    if datetime.now() < config.SEMESTER_START_DATE:
+    if datetime.now() < SEMESTER_START_DATE:
         await callback.answer(i18n.get("alert-semester-not-started"), show_alert=True)
         return
 
