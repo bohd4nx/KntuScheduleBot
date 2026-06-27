@@ -2,34 +2,13 @@
 __pycache__/
 *.py[cod]
 *$py.class
-*.so
-.Python
-build/
-develop-eggs/
-dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-wheels/
 *.egg-info/
-.installed.cfg
-*.egg
+dist/
+build/
 
 # Virtual Environment
 venv/
 .venv/
-env/
-
-# Database
-*.db
-*.db-*
-*.sqlite
-*.sqlite3
 
 # Environment variables
 .env
@@ -38,17 +17,16 @@ env/
 # IDE
 .vscode/
 .idea/
-*.swp
-*.swo
-*~
 
 # Logs
 *.log
 
 # OS
 .DS_Store
-Thumbs.db
 
 # Schedule files
 schedule.json
 /schedules
+
+# Production compose
+docker-compose.*.yml

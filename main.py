@@ -47,7 +47,7 @@ async def main() -> None:
 
     await _setup_bot_info(bot)
 
-    i18n_core = FluentCompileCore(path="locales/{locale}")
+    i18n_core = FluentCompileCore(path="locales/{locale}/LC_MESSAGES")
     await i18n_core.startup()
     i18n = I18nMiddleware(core=i18n_core, default_locale=DEFAULT_LOCALE)
 
