@@ -1,23 +1,22 @@
 [project]
 name = "kntu-schedule-bot"
-version = "2026.1.0"
+version = "2026.2.0"
 description = "Telegram bot for KNTU schedule"
 requires-python = ">=3.12"
 authors = [{ name = "bohd4nx" }]
 dependencies = [
     "aiogram[i18n]>=3.25.0",
     "aiogram_i18n>=1.4",
-    "aiohttp>=3.12.12",
+    "curl_cffi>=0.13.0",
+    "pydantic>=2.0",
+    "tzdata>=2024.1",
+    "redis>=5.0",
     "fluent_compiler>=1.1",
     "python-dotenv>=1.1.0",
-    "sqlalchemy[asyncio]>=2.0.44",
-    "asyncpg>=0.30.0",
-    "greenlet==3.3.0",
-    "xlrd>=2.0.0",
 ]
 
 [project.optional-dependencies]
-dev = ["ruff", "mypy", "types-xlrd"]
+dev = ["ruff", "mypy"]
 
 [tool.setuptools.packages.find]
 include = ["bot*"]

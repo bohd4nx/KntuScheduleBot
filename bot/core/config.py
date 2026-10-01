@@ -10,20 +10,19 @@ logger = logging.getLogger(__name__)
 
 class Config:
     def __init__(self) -> None:
-        env_path = Path(__file__).resolve().parents[2] / ".env"
+        self.ROOT_DIR: Path = Path(__file__).resolve().parents[2]
+        self.LOCALES_DIR: Path = self.ROOT_DIR / "locales"
+        self.DEFAULT_LOCALE: str = "uk"
 
-        load_dotenv(env_path, encoding="utf-8")
+        load_dotenv(self.ROOT_DIR / ".env", encoding="utf-8")
 
         self.BOT_TOKEN: str = self._require_env("BOT_TOKEN")
 
-        self.POSTGRES_USER: str = self._require_env("POSTGRES_USER")
-        self.POSTGRES_PASSWORD: str = self._require_env("POSTGRES_PASSWORD")
-        self.POSTGRES_HOST: str = os.getenv("POSTGRES_HOST", "db")
-        self.POSTGRES_PORT: str = os.getenv("POSTGRES_PORT", "5432")
-        self.POSTGRES_DB: str = self._require_env("POSTGRES_DB")
+        # Refresh-токен порталу (cookie staffportal_refresh). Портал ротує його при кожному оновленні,
+        # тож актуальний лежить у Redis, а змінна лише запускає перший старт.
+        self.PORTAL_REFRESH_TOKEN: str = self._require_env("PORTAL_REFRESH_TOKEN")
 
-        self.SCHEDULE_GROUP: str | None = os.getenv("SCHEDULE_GROUP") or None
-        self.PARSER_SOURCE_URL: str | None = os.getenv("PARSER_SOURCE_URL") or None
+        self.REDIS_URL: str = os.getenv("REDIS_URL", "redis://redis:6379/0")
 
     @staticmethod
     def _require_env(name: str) -> str:
