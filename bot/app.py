@@ -1,6 +1,7 @@
 from aiogram import Bot, Dispatcher
 from aiogram.client.default import DefaultBotProperties
 from aiogram.enums import ParseMode
+from aiogram.exceptions import TelegramRetryAfter
 from aiogram.types import BotCommand
 from aiogram_i18n import I18nMiddleware
 from aiogram_i18n.cores.fluent_compile_core import FluentCompileCore
@@ -18,6 +19,14 @@ BOT_COMMANDS = [
     BotCommand(command="help", description="❓ Як користуватися"),
 ]
 
+BOT_NAME = "ЦНТУ | Розклад занять"
+BOT_DESCRIPTION = (
+    "📅 Актуальний розклад занять для студентів кафедри кібербезпеки та програмного забезпечення ЦНТУ.\n\n"
+    "• Розклад на сьогодні, завтра або весь тиждень\n"
+    "• Розклад береться напряму з порталу ЦНТУ та оновлюється раз на добу"
+)
+BOT_SHORT_DESCRIPTION = "Розклад занять для кафедри кібербезпеки та програмного забезпечення ЦНТУ"
+
 
 def build_bot() -> Bot:
     return Bot(
@@ -27,14 +36,14 @@ def build_bot() -> Bot:
 
 
 async def setup_bot_info(bot: Bot) -> None:
+    """Виставляє команди й тексти профілю; Telegram жорстко лімітує їх зміну, тож пишемо лише відмінне."""
     await bot.set_my_commands(BOT_COMMANDS)
-    await bot.set_my_name("ЦНТУ | Розклад занять")
-    await bot.set_my_description(
-        "📅 Актуальний розклад занять для студентів кафедри кібербезпеки та програмного забезпечення ЦНТУ.\n\n"
-        "• Розклад на сьогодні, завтра або весь тиждень\n"
-        "• Розклад береться напряму з порталу ЦНТУ та оновлюється раз на добу"
-    )
-    await bot.set_my_short_description("Розклад занять для кафедри кібербезпеки та програмного забезпечення ЦНТУ")
+    if (await bot.get_my_name()).name != BOT_NAME:
+        await bot.set_my_name(BOT_NAME)
+    if (await bot.get_my_description()).description != BOT_DESCRIPTION:
+        await bot.set_my_description(BOT_DESCRIPTION)
+    if (await bot.get_my_short_description()).short_description != BOT_SHORT_DESCRIPTION:
+        await bot.set_my_short_description(BOT_SHORT_DESCRIPTION)
 
 
 async def build_dispatcher(bot: Bot) -> Dispatcher:
@@ -48,7 +57,11 @@ async def build_dispatcher(bot: Bot) -> Dispatcher:
 
     @dp.startup()
     async def on_startup() -> None:
-        await setup_bot_info(bot)
+        try:
+            await setup_bot_info(bot)
+        except TelegramRetryAfter as error:
+            # Профіль не критичний для роботи: бот стартує й без його оновлення.
+            logger.warning("Bot profile update skipped: retry in %s s", error.retry_after)
         start_keepalive()  # фонове оновлення сесії порталу
         logger.info("Bot started")
 
