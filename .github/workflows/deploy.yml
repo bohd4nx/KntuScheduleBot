@@ -9,8 +9,8 @@ jobs:
     name: Lint & Type Check
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v6
-    - uses: actions/setup-python@v6
+    - uses: actions/checkout@v7
+    - uses: actions/setup-python@v7
       with:
         python-version: "3.12"
     - run: pip install -e ".[dev]"
@@ -27,9 +27,9 @@ jobs:
       REMOTE: ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}
       DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v7
 
-    - uses: webfactory/ssh-agent@v0.9.0
+    - uses: webfactory/ssh-agent@v0.10.0
       with:
         ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
@@ -54,18 +54,9 @@ jobs:
     - name: Write .env on server
       env:
         BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
-        POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
-        POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
-        POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
-        POSTGRES_HOST: ${{ secrets.POSTGRES_HOST }}
-        POSTGRES_PORT: ${{ secrets.POSTGRES_PORT }}
-        SCHEDULE_GROUP: ${{ secrets.SCHEDULE_GROUP }}
-        PARSER_SOURCE_URL: ${{ secrets.PARSER_SOURCE_URL }}
+        PORTAL_REFRESH_TOKEN: ${{ secrets.PORTAL_REFRESH_TOKEN }}
       run: |
-        printf 'BOT_TOKEN=%s\n\nPOSTGRES_DB=%s\nPOSTGRES_USER=%s\nPOSTGRES_PASSWORD=%s\nPOSTGRES_HOST=%s\nPOSTGRES_PORT=%s\n\nSCHEDULE_GROUP=%s\nPARSER_SOURCE_URL=%s\n' \
-          "$BOT_TOKEN" \
-          "$POSTGRES_DB" "$POSTGRES_USER" "$POSTGRES_PASSWORD" "$POSTGRES_HOST" "$POSTGRES_PORT" \
-          "$SCHEDULE_GROUP" "$PARSER_SOURCE_URL" \
+        printf 'BOT_TOKEN=%s\nPORTAL_REFRESH_TOKEN=%s\n' "$BOT_TOKEN" "$PORTAL_REFRESH_TOKEN" \
           | ssh $SSH_OPTS "$REMOTE" "cat > $DEPLOY_PATH/.env"
 
     - name: Build and restart container

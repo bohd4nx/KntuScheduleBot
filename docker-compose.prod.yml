@@ -1,0 +1,42 @@
+services:
+  redis:
+    container_name: kntu-schedule-redis
+    image: redis:7-alpine
+    restart: unless-stopped
+    # AOF: у Redis лежить ротований refresh-токен порталу — він має пережити рестарт
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+    networks:
+      - internal
+
+  bot:
+    container_name: kntu-schedule-bot
+    image: kntu-schedule-bot
+    build: .
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      REDIS_URL: redis://redis:6379/0
+    depends_on:
+      redis:
+        condition: service_healthy
+    networks:
+      - internal
+      # Спільна мережа ботів. Redis у ній не публікуємо: аліас `redis` міг би
+      # збігтися з Redis іншого проєкту.
+      - bots_network
+
+volumes:
+  redis_data:
+
+networks:
+  internal:
+  bots_network:
+    external: true

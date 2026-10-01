@@ -23,10 +23,3 @@ venv/
 
 # OS
 .DS_Store
-
-# Schedule files
-schedule.json
-/schedules
-
-# Production compose
-docker-compose.*.yml
