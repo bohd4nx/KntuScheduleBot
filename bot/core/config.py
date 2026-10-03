@@ -24,6 +24,20 @@ class Config:
 
         self.REDIS_URL: str = os.getenv("REDIS_URL", "redis://redis:6379/0")
 
+        # Чат, куди щодня о 6:00 за Києвом надсилається розклад. Не задано — розсилки немає.
+        self.GROUP_ID: int | None = self._optional_int_env("GROUP_ID")
+
+    @staticmethod
+    def _optional_int_env(name: str) -> int | None:
+        value = os.getenv(name)
+        if not value or not value.strip():
+            return None
+        try:
+            return int(value)
+        except ValueError:
+            logger.error("Environment variable %s must be an integer chat id, got %r", name, value)
+            sys.exit(1)
+
     @staticmethod
     def _require_env(name: str) -> str:
         value = os.getenv(name)
