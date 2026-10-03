@@ -1,17 +1,15 @@
-import asyncio
-
 from aiogram import Bot, Dispatcher
 from aiogram.client.default import DefaultBotProperties
 from aiogram.enums import ParseMode
 from aiogram.exceptions import TelegramRetryAfter
 from aiogram.types import BotCommand
-from aiogram_i18n import I18nContext, I18nMiddleware
+from aiogram_i18n import I18nMiddleware
 from aiogram_i18n.cores.fluent_compile_core import FluentCompileCore
 
 from bot.core import config, logger
 from bot.handlers import commands, errors, menu, schedule
+from bot.scheduler import start_daily_digest, stop_daily_digest
 from bot.services import cache
-from bot.services.digest import start_digest
 from bot.services.schedule import close_schedule_client, start_keepalive
 
 BOT_COMMANDS = [
@@ -57,7 +55,6 @@ async def build_dispatcher(bot: Bot) -> Dispatcher:
     dp.include_routers(errors.router, commands.router, menu.router, schedule.router)
     i18n = I18nMiddleware(core=i18n_core, default_locale=config.DEFAULT_LOCALE)
     i18n.setup(dispatcher=dp)
-    digest_task: asyncio.Task[None] | None = None
 
     @dp.startup()
     async def on_startup() -> None:
@@ -67,17 +64,12 @@ async def build_dispatcher(bot: Bot) -> Dispatcher:
             # Профіль не критичний для роботи: бот стартує й без його оновлення.
             logger.warning("Bot profile update skipped: retry in %s s", error.retry_after)
         start_keepalive()  # фонове оновлення сесії порталу
-        # Поза хендлерами i18n-контексту немає — збираємо власний із дефолтною локаллю.
-        nonlocal digest_task
-        digest_task = start_digest(
-            bot, I18nContext(locale=config.DEFAULT_LOCALE, core=i18n.core, manager=i18n.manager, data={})
-        )
+        start_daily_digest(bot, i18n)
         logger.info("Bot started")
 
     @dp.shutdown()
     async def on_shutdown() -> None:
-        if digest_task:
-            digest_task.cancel()
+        stop_daily_digest()
         await close_schedule_client()
         await cache.close()
         await i18n.core.shutdown()

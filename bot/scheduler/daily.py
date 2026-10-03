@@ -3,7 +3,7 @@ from datetime import datetime, time, timedelta
 
 from aiogram import Bot
 from aiogram.exceptions import TelegramAPIError
-from aiogram_i18n import I18nContext
+from aiogram_i18n import I18nContext, I18nMiddleware
 
 from bot.core import config, logger
 from bot.services.schedule import PortalError, get_day
@@ -43,8 +43,19 @@ async def _digest_loop(bot: Bot, i18n: I18nContext, chat_id: int) -> None:
             logger.error("Daily schedule was not sent: %s", exc)
 
 
-def start_digest(bot: Bot, i18n: I18nContext) -> asyncio.Task[None] | None:
+_task: asyncio.Task[None] | None = None
+
+
+def start_daily_digest(bot: Bot, i18n: I18nMiddleware) -> None:
     """Щоденна розсилка в `GROUP_ID`; без нього нічого не запускає."""
+    global _task
     if config.GROUP_ID is None:
-        return None
-    return asyncio.create_task(_digest_loop(bot, i18n, config.GROUP_ID))
+        return
+    # Поза хендлерами i18n-контексту немає — збираємо власний із дефолтною локаллю.
+    context = I18nContext(locale=config.DEFAULT_LOCALE, core=i18n.core, manager=i18n.manager, data={})
+    _task = asyncio.create_task(_digest_loop(bot, context, config.GROUP_ID))
+
+
+def stop_daily_digest() -> None:
+    if _task:
+        _task.cancel()
