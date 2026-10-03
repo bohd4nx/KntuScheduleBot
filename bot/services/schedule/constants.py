@@ -3,8 +3,8 @@ BASE_URL = "https://portal.kntu.kr.ua/api"
 ACCESS_COOKIE = "staffportal_access"
 REFRESH_COOKIE = "staffportal_refresh"
 
-# Кеш відповідей порталу — на добу (ключ — понеділок тижня).
-CACHE_TTL_SECONDS = 24 * 60 * 60
+# Кеш відповідей порталу — на 12 годин (ключ — понеділок тижня).
+CACHE_TTL_SECONDS = 12 * 60 * 60
 
 # Access-токен живе 30 хв — оновлюємо трохи раніше, щоб не влучити в протухлий.
 ACCESS_EXPIRY_MARGIN_SECONDS = 60

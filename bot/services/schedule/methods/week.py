@@ -30,7 +30,7 @@ async def _fetch_week(monday: date) -> Any:
 
 
 async def get_week(day: date) -> WeekSchedule:
-    """Тиждень, що містить `day`. Кеш у Redis на добу; якщо портал недоступний — віддає застарілий."""
+    """Тиждень, що містить `day`. Кеш у Redis на 12 годин; якщо портал недоступний — віддає застарілий."""
     monday = day - timedelta(days=day.weekday())
     async with _fetch_lock:
         cached = await cache.schedule.get_week(monday)
