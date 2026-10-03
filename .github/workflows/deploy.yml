@@ -55,8 +55,9 @@ jobs:
       env:
         BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
         PORTAL_REFRESH_TOKEN: ${{ secrets.PORTAL_REFRESH_TOKEN }}
+        GROUP_ID: ${{ secrets.GROUP_ID }}
       run: |
-        printf 'BOT_TOKEN=%s\nPORTAL_REFRESH_TOKEN=%s\n' "$BOT_TOKEN" "$PORTAL_REFRESH_TOKEN" \
+        printf 'BOT_TOKEN=%s\nPORTAL_REFRESH_TOKEN=%s\nGROUP_ID=%s\n' "$BOT_TOKEN" "$PORTAL_REFRESH_TOKEN" "$GROUP_ID" \
           | ssh $SSH_OPTS "$REMOTE" "cat > $DEPLOY_PATH/.env"
 
     - name: Build and restart container
