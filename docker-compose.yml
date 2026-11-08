@@ -1,30 +1,35 @@
+x-build: &build
+  context: .
+  dockerfile: Dockerfile
+
 services:
   redis:
     container_name: kntu-schedule-redis
     image: redis:7-alpine
-    # AOF: в Redis лежить ротований refresh-токен порталу — він має пережити рестарт
+    restart: unless-stopped
+    # AOF: у Redis лежить ротований refresh-токен порталу — він має пережити рестарт
     command: ["redis-server", "--appendonly", "yes"]
     volumes:
-      - redis_data_local:/data
+      - redis_data:/data
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
-      interval: 5s
+      interval: 10s
       timeout: 3s
       retries: 5
 
   bot:
     container_name: kntu-schedule-bot
-    image: kntu-schedule-bot
-    build: .
-    volumes:
-      - .:/app
+    image: kntu-schedule-bot:latest
+    build: *build
+    restart: unless-stopped
     env_file:
       - .env
     environment:
       REDIS_URL: redis://redis:6379/0
+    command: uv run python main.py
     depends_on:
       redis:
         condition: service_healthy
 
 volumes:
-  redis_data_local:
+  redis_data:

@@ -5,18 +5,26 @@ description = "Telegram bot for KNTU schedule"
 requires-python = ">=3.12"
 authors = [{ name = "bohd4nx" }]
 dependencies = [
-    "aiogram[i18n]>=3.25.0",
-    "aiogram_i18n>=1.4",
+    "aiogram[i18n]>=3.31.0",
+    "aiogram_i18n[compiler]>=1.5",
     "curl_cffi>=0.13.0",
     "pydantic>=2.0",
     "tzdata>=2024.1",
     "redis>=5.0",
-    "fluent_compiler>=1.1",
-    "python-dotenv>=1.1.0",
+    "python-dotenv>=1.2.4",
+    "pydantic-settings>=2.16.2",
+    "apscheduler>=3.11.3",
 ]
 
 [project.optional-dependencies]
-dev = ["ruff", "mypy"]
+dev = [
+    "ruff",
+    "mypy",
+]
+
+[build-system]
+requires = ["setuptools>=80.10.1"]
+build-backend = "setuptools.build_meta"
 
 [tool.setuptools.packages.find]
 include = ["bot*"]
@@ -26,12 +34,15 @@ line-length = 128
 target-version = "py312"
 
 [tool.ruff.lint]
-# E — pycodestyle errors, F — pyflakes, W — warnings, I — isort, UP — pyupgrade
-select = ["E", "F", "W", "I", "UP"]
-# E501 — line too long (covered by line-length above)
-ignore = ["E501"]
+select = [
+    "E", "W", "F", "I", "N", "UP", "B", "A", "C4", "SIM", "RET", "PIE", "PERF",
+    "FURB", "RUF", "ASYNC", "PTH", "LOG", "G", "T20", "ISC", "TID", "S", "BLE",
+]
+ignore = ["RUF001", "RUF002", "RUF003"]
 
 [tool.mypy]
 python_version = "3.12"
-strict = true
 explicit_package_bases = true
+ignore_missing_imports = true
+exclude = ["^build/"]
+strict = true

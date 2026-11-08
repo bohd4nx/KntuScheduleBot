@@ -10,7 +10,7 @@ def main() -> None:
         asyncio.run(run())
     except (KeyboardInterrupt, SystemExit):
         pass
-    except Exception:
+    except Exception:  # noqa: BLE001 - top-level guard, log and exit instead of a raw traceback
         logger.exception("Unexpected error")
 
 

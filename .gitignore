@@ -10,9 +10,16 @@ build/
 venv/
 .venv/
 
+# Caches
+.mypy_cache/
+.ruff_cache/
+
 # Environment variables
 .env
 .env.local
+
+# Online lesson links (optional, see links.example.json)
+links.json
 
 # IDE
 .vscode/
