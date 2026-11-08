@@ -6,7 +6,7 @@ from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from bot.core import DEFAULT_LOCALE, logger, settings
 from bot.utils.constants import KYIV_TZ
 
-from .constants import DAILY_SCHEDULE_DAYS, DAILY_SCHEDULE_HOUR
+from .constants import DAILY_SCHEDULE_DAYS, DAILY_SCHEDULE_HOUR, DAILY_SCHEDULE_MISFIRE_GRACE_SECONDS
 from .jobs import send_daily_schedule
 
 
@@ -33,5 +33,6 @@ def build_scheduler(bot: Bot, i18n: I18nMiddleware) -> AsyncIOScheduler:
         kwargs={"bot": bot, "i18n": context, "chat_id": settings.GROUP_ID},
         max_instances=1,
         coalesce=True,
+        misfire_grace_time=DAILY_SCHEDULE_MISFIRE_GRACE_SECONDS,
     )
     return scheduler

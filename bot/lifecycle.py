@@ -1,5 +1,5 @@
 from aiogram import Bot
-from aiogram.exceptions import TelegramRetryAfter
+from aiogram.exceptions import TelegramAPIError
 from aiogram_i18n.cores import BaseCore
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 
@@ -11,9 +11,9 @@ from bot.services.schedule import close_schedule_client, start_keepalive
 async def on_startup(bot: Bot, scheduler: AsyncIOScheduler) -> None:
     try:
         await setup_bot_info(bot)
-    except TelegramRetryAfter as error:
+    except TelegramAPIError as error:
         # Профіль не критичний для роботи: бот стартує й без його оновлення.
-        logger.warning("Bot profile update skipped: retry in %s s", error.retry_after)
+        logger.warning("Bot profile update skipped: %s", error)
     start_keepalive()
     scheduler.start()
     logger.info("Bot started")

@@ -19,6 +19,8 @@ async def keepalive_loop(session: AsyncSession[Response]) -> None:
                 logger.error("Portal refresh token rejected — set a new PORTAL_REFRESH_TOKEN")
             else:
                 logger.warning("Portal keepalive failed: %s", exc)
+        except Exception:  # noqa: BLE001 - без циклу refresh-токен протухне, тож він не має падати ні від чого
+            logger.exception("Portal keepalive crashed unexpectedly")
         await asyncio.sleep(KEEPALIVE_INTERVAL_SECONDS)
 
 
