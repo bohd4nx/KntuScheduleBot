@@ -1,8 +1,10 @@
 FROM python:3.12-slim
 
+# UV_NO_SYNC: deps are synced at build time; otherwise `uv run` installs the project itself on every start.
 ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
-    TZ=Europe/Kyiv
+    TZ=Europe/Kyiv \
+    UV_NO_SYNC=1
 
 WORKDIR /app
 
