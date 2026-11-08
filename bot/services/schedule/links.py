@@ -1,6 +1,6 @@
 from dataclasses import replace
 
-from pydantic import TypeAdapter
+from pydantic import TypeAdapter, ValidationError
 
 from bot.core import LINKS_PATH, logger
 
@@ -11,7 +11,12 @@ def load_links() -> dict[str, SubjectLinks]:
     if not LINKS_PATH.is_file():
         logger.info("%s not found; lessons are shown without online links", LINKS_PATH.name)
         return {}
-    return TypeAdapter(dict[str, SubjectLinks]).validate_json(LINKS_PATH.read_bytes())
+    try:
+        return TypeAdapter(dict[str, SubjectLinks]).validate_json(LINKS_PATH.read_bytes())
+    except ValidationError as exc:
+        # Битий файл посилань не має забирати в людей увесь розклад.
+        logger.error("%s is invalid; lessons are shown without online links: %s", LINKS_PATH.name, exc)
+        return {}
 
 
 _LINKS = load_links()

@@ -6,7 +6,7 @@ from bot.services.schedule.enums import LessonKind
 class SubjectLinks(BaseModel):
     """Посилання предмета: окреме для типу пари або `default` для всіх інших."""
 
-    # Друкарська помилка в ключі має впасти на старті, а не тихо сховати посилання.
+    # Друкарська помилка в ключі має бути видна в логах, а не тихо сховати посилання.
     model_config = ConfigDict(extra="forbid", frozen=True)
 
     default: str | None = None
