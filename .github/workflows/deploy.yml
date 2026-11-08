@@ -54,16 +54,25 @@ jobs:
 
     - name: Sync project to server
       run: |
-        rsync -az --delete \
+        # --delete-excluded also wipes junk left on the server; P keeps its own .env and links.json.
+        rsync -az --delete --delete-excluded \
+          --filter='P .env' \
+          --filter='P links.json' \
           --exclude=.git/ \
+          --exclude=.github/ \
           --exclude=.env \
+          --exclude=.env.example \
+          --exclude=links.json \
+          --exclude=links.example.json \
+          --exclude=README.md \
+          --exclude=.gitignore \
           --exclude=__pycache__/ \
           --exclude='*.pyc' \
           --exclude=.mypy_cache/ \
           --exclude=.ruff_cache/ \
           --exclude=.venv/ \
+          --exclude='*.egg-info/' \
           --exclude=.DS_Store \
-          --exclude=links.json \
           -e "ssh $SSH_OPTS" \
           ./ "$REMOTE:$DEPLOY_PATH"
 
