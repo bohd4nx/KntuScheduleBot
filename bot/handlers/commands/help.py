@@ -16,6 +16,7 @@ async def help_command(message: Message, i18n: I18nContext) -> None:
 @router.callback_query(F.data == MainMenuCallback.HOW_TO_USE)
 async def how_to_use_callback(callback: CallbackQuery, i18n: I18nContext) -> None:
     if not isinstance(callback.message, Message):
+        await callback.answer()
         return
     await callback.message.edit_text(i18n.get("how-to-use"))
     await callback.answer()

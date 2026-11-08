@@ -12,6 +12,7 @@ async def answer_message(message: Message, i18n: I18nContext, view: ScheduleView
 
 async def answer_callback(callback: CallbackQuery, i18n: I18nContext, view: ScheduleView) -> None:
     if not isinstance(callback.message, Message):
+        await callback.answer()
         return
     if view.text is None:
         await callback.answer(i18n.get(f"alert-{view.notice or 'schedule-unavailable'}"), show_alert=True)

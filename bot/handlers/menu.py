@@ -12,6 +12,7 @@ router = Router(name=__name__)
 @router.callback_query(F.data == MainMenuCallback.BACK_TO_MENU)
 async def back_to_menu_callback(callback: CallbackQuery, i18n: I18nContext) -> None:
     if not isinstance(callback.message, Message):
+        await callback.answer()
         return
     name = escape(callback.from_user.full_name or callback.from_user.first_name or "User")
 

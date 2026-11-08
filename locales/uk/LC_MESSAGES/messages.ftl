@@ -63,3 +63,6 @@ week-day-header = <tg-emoji emoji-id="5258105663359294787">🗓️</tg-emoji> <b
 
 schedule-unavailable = <tg-emoji emoji-id="5260342697075416641">🙃</tg-emoji> Не вдалося отримати розклад з порталу. Спробуй пізніше.
 alert-schedule-unavailable = ❌ Не вдалося отримати розклад з порталу. Спробуй пізніше.
+
+unexpected-error = <tg-emoji emoji-id="5260342697075416641">🙃</tg-emoji> Щось пішло не так. Спробуй ще раз.
+alert-unexpected-error = ❌ Щось пішло не так. Спробуй ще раз.
