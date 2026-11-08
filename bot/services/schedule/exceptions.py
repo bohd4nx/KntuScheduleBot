@@ -10,5 +10,4 @@ class PortalError(Exception):
 
     @property
     def is_auth_error(self) -> bool:
-        """Портал відхилив облікові дані — потрібен новий PORTAL_REFRESH_TOKEN."""
         return self.status_code in (400, 401, 403)

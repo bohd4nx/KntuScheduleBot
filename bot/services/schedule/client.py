@@ -4,7 +4,6 @@ from typing import Any
 from curl_cffi.requests import AsyncSession, RequestsError, Response
 
 from bot.core import logger
-from bot.utils.http import backoff, read_json, retry_delay
 
 from . import auth
 from .constants import (
@@ -17,6 +16,7 @@ from .constants import (
     RETRYABLE_STATUS_CODES,
 )
 from .exceptions import PortalError
+from .http import backoff, retry_delay
 
 TIMEOUT = (CONNECT_TIMEOUT_SECONDS, REQUEST_TIMEOUT_SECONDS)
 
@@ -64,7 +64,7 @@ async def get_json(path: str, *, params: dict[str, Any] | None = None) -> Any:
         if status != 200:
             raise PortalError(f"HTTP {status} for GET {path}", status_code=status)
         try:
-            return read_json(response)
+            return response.json()
         except ValueError as exc:
             raise PortalError(f"Response of GET {path} is not valid JSON") from exc
 

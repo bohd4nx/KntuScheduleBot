@@ -3,10 +3,9 @@ from urllib.parse import urlparse
 
 from curl_cffi.requests import AsyncSession, RequestsError, Response
 
-from bot.core import config, logger
+from bot.core import logger, settings
 from bot.services import cache
-
-from ..constants import (
+from bot.services.schedule.constants import (
     ACCESS_COOKIE,
     ACCESS_EXPIRY_MARGIN_SECONDS,
     ACCESS_FALLBACK_TTL_SECONDS,
@@ -15,7 +14,8 @@ from ..constants import (
     REFRESH_COOKIE,
     REQUEST_TIMEOUT_SECONDS,
 )
-from ..exceptions import PortalError
+from bot.services.schedule.exceptions import PortalError
+
 from .jwt import jwt_expiry
 from .state import state
 
@@ -32,7 +32,7 @@ async def refresh_session(session: AsyncSession[Response], *, force: bool = Fals
             return
 
         if not state.refresh_cookie_loaded:
-            token = await cache.token.load_refresh_token(seed=config.PORTAL_REFRESH_TOKEN)
+            token = await cache.token.load_refresh_token(seed=settings.PORTAL_REFRESH_TOKEN.get_secret_value())
             session.cookies.set(REFRESH_COOKIE, token, domain=urlparse(BASE_URL).hostname or "", path="/")
             state.refresh_cookie_loaded = True
 
@@ -48,7 +48,7 @@ async def refresh_session(session: AsyncSession[Response], *, force: bool = Fals
             raise PortalError(f"HTTP {response.status_code} for POST auth/refresh", status_code=response.status_code)
 
         state.access_expires_at = jwt_expiry(access) or time.time() + ACCESS_FALLBACK_TTL_SECONDS
-        await cache.token.save_refresh_token(config.PORTAL_REFRESH_TOKEN, refresh)
+        await cache.token.save_refresh_token(settings.PORTAL_REFRESH_TOKEN.get_secret_value(), refresh)
         logger.info("Portal session refreshed")
 
 

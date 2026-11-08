@@ -29,7 +29,7 @@ alert-no-lessons-tomorrow = 🥂 Завтра пар немає! Вихідни�
 alert-no-lessons-week = 🎉 На цьому тижні пар немає! Відпочивай!
 
 lesson-item = <b>{$number}. {$subject}</b>{$kind_display} (<code>{$time}</code>)
-    {$notes_display}{$teachers_count ->
+    {$notes_display}{$online_link_display}{$teachers_count ->
 [1] <b>Викладач:</b> {$teacher}
 *[other] <b>Викладачі:</b> {$teacher}
     }
@@ -39,6 +39,20 @@ room-gym = <b>Заняття проходить у спортзалі</b>
 room-regular = Аудиторія: <b>{$room}</b>
 lesson-notice = <b>Оголошення:</b> {$text}
 lesson-info = <b>Від викладача:</b> {$text}
+online-link = <b>Посилання:</b> <a href="{$url}">підключитися до заняття</a>
+
+lesson-kind-lecture = Лекція
+lesson-kind-practice = Практична
+lesson-kind-seminar = Семінар
+lesson-kind-lab = Лабораторна
+
+weekday-0 = Понеділок
+weekday-1 = Вівторок
+weekday-2 = Середа
+weekday-3 = Четвер
+weekday-4 = П'ятниця
+weekday-5 = Субота
+weekday-6 = Неділя
 
 week-schedule-header = <tg-emoji emoji-id="5258334872878980409">🗓️</tg-emoji> <b>Розклад на тиждень ({ DATETIME($start, dateStyle: "short") } — { DATETIME($end, dateStyle: "short") })</b> — {$week_type}
 week-numerator = Чисельник

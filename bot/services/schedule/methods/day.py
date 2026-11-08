@@ -1,6 +1,7 @@
 from datetime import date
 
-from ..schemas import Lesson
+from bot.services.schedule.schemas import Lesson
+
 from .week import get_week
 
 

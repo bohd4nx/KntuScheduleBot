@@ -1,36 +1,15 @@
 import datetime as dt
-from dataclasses import dataclass
 from typing import Any
 
 from pydantic import BaseModel, ConfigDict, field_validator
 from pydantic.alias_generators import to_camel
 
-from .enums import LessonKind
+from bot.services.schedule.enums import LessonKind
 
-
-@dataclass(frozen=True, slots=True)
-class Lesson:
-    """Пара у вигляді, в якому її показує бот."""
-
-    number: int
-    subject: str
-    kind: LessonKind | None
-    teacher: str
-    room: str | None
-    start: str
-    end: str
-    groups: str
-    notice: str | None
-    info: str | None
-
-
-# Дата → пари дня. Тиждень без пар — порожній словник, не помилка.
-WeekSchedule = dict[dt.date, list[Lesson]]
+from .lesson import Lesson, WeekSchedule
 
 
 class PortalModel(BaseModel):
-    """База відповідей порталу: camelCase у JSON, snake_case у Python, зайві ключі ігноруються."""
-
     model_config = ConfigDict(
         alias_generator=to_camel,
         populate_by_name=True,
@@ -60,7 +39,7 @@ class Period(PortalModel):
 
     @field_validator("type", mode="before")
     @classmethod
-    def _known_kind(cls, value: Any) -> LessonKind | None:
+    def known_kind(cls, value: Any) -> LessonKind | None:
         # Невідомий код типу не ламає розклад — просто без мітки.
         try:
             return LessonKind(value)
@@ -69,7 +48,7 @@ class Period(PortalModel):
 
     @field_validator("notice", "info")
     @classmethod
-    def _blank_to_none(cls, value: str | None) -> str | None:
+    def blank_to_none(cls, value: str | None) -> str | None:
         return (value or "").strip() or None
 
     def to_lesson(self, number: int, call: Call | None) -> Lesson:

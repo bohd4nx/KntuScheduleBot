@@ -3,7 +3,6 @@ BASE_URL = "https://portal.kntu.kr.ua/api"
 ACCESS_COOKIE = "staffportal_access"
 REFRESH_COOKIE = "staffportal_refresh"
 
-# Кеш відповідей порталу — на 12 годин (ключ — понеділок тижня).
 CACHE_TTL_SECONDS = 12 * 60 * 60
 
 # Access-токен живе 30 хв — оновлюємо трохи раніше, щоб не влучити в протухлий.
@@ -21,7 +20,6 @@ MAX_ATTEMPTS = 3
 REQUEST_TIMEOUT_SECONDS = 8.0
 CONNECT_TIMEOUT_SECONDS = 5.0
 
-# Тимчасові збої, які варто повторити: 429 та помилки шлюзу.
 # Пауза обмежена, щоб запит користувача не висів хвилинами.
 RETRYABLE_STATUS_CODES = frozenset({429, 500, 502, 503, 504})
 MAX_RETRY_WAIT_SECONDS = 8.0

@@ -3,14 +3,14 @@ import asyncio
 from curl_cffi.requests import AsyncSession, Response
 
 from bot.core import logger
+from bot.services.schedule.constants import KEEPALIVE_INTERVAL_SECONDS
+from bot.services.schedule.exceptions import PortalError
 
-from ..constants import KEEPALIVE_INTERVAL_SECONDS
-from ..exceptions import PortalError
 from .refresh import refresh_session
 from .state import state
 
 
-async def _keepalive(session: AsyncSession[Response]) -> None:
+async def keepalive_loop(session: AsyncSession[Response]) -> None:
     while True:
         try:
             await refresh_session(session, force=True)
@@ -24,7 +24,7 @@ async def _keepalive(session: AsyncSession[Response]) -> None:
 
 def start_keepalive(session: AsyncSession[Response]) -> None:
     """Одразу перевіряє токен і далі тримає refresh живим у фоні."""
-    state.keepalive_task = asyncio.create_task(_keepalive(session))
+    state.keepalive_task = asyncio.create_task(keepalive_loop(session))
 
 
 def stop_keepalive() -> None:

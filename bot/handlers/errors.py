@@ -11,7 +11,6 @@ router = Router(name=__name__)
 
 @router.errors(ExceptionTypeFilter(PortalError))
 async def portal_error(event: ErrorEvent, i18n: I18nContext) -> None:
-    """Збій порталу не валить бота: користувач отримує коротке повідомлення."""
     logger.error("Schedule fetch failed: %s", event.exception)
     update = event.update
     if update.callback_query:

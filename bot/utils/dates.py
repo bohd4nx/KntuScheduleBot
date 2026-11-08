@@ -1,9 +1,7 @@
 from datetime import datetime, timedelta
-from typing import Final, Literal
-from zoneinfo import ZoneInfo
 
-# Контейнер працює в UTC, а «сьогодні» має рахуватися за Києвом
-KYIV_TZ: Final = ZoneInfo("Europe/Kyiv")
+from .constants import KYIV_TZ, WORK_DAYS_COUNT
+from .enums import WeekType
 
 
 def now() -> datetime:
@@ -14,7 +12,7 @@ def now() -> datetime:
 def get_week_monday() -> datetime:
     """Понеділок поточного тижня; у суботу й неділю — наступного."""
     today = now()
-    if today.weekday() >= 5:
+    if today.weekday() >= WORK_DAYS_COUNT:
         return today + timedelta(days=7 - today.weekday())
     return today - timedelta(days=today.weekday())
 
@@ -22,9 +20,9 @@ def get_week_monday() -> datetime:
 def get_week_dates() -> tuple[datetime, datetime]:
     """Межі робочого тижня: понеділок і п'ятниця."""
     monday = get_week_monday()
-    return monday, monday + timedelta(days=4)
+    return monday, monday + timedelta(days=WORK_DAYS_COUNT - 1)
 
 
-def get_week_type(date: datetime) -> Literal["numerator", "denominator"]:
-    """Тип тижня: парний ISO-тиждень — чисельник, непарний — знаменник."""
-    return "numerator" if date.isocalendar()[1] % 2 == 0 else "denominator"
+def get_week_type(date: datetime) -> WeekType:
+    """Парний ISO-тиждень — чисельник, непарний — знаменник."""
+    return WeekType.NUMERATOR if date.isocalendar()[1] % 2 == 0 else WeekType.DENOMINATOR

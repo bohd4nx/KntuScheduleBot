@@ -3,6 +3,8 @@ from aiogram.filters import Command
 from aiogram.types import CallbackQuery, Message
 from aiogram_i18n import I18nContext
 
+from bot.keyboards import MainMenuCallback
+
 router = Router(name=__name__)
 
 
@@ -11,7 +13,7 @@ async def help_command(message: Message, i18n: I18nContext) -> None:
     await message.answer(i18n.get("how-to-use"))
 
 
-@router.callback_query(F.data == "how_to_use")
+@router.callback_query(F.data == MainMenuCallback.HOW_TO_USE)
 async def how_to_use_callback(callback: CallbackQuery, i18n: I18nContext) -> None:
     if not isinstance(callback.message, Message):
         return

@@ -1,51 +1,70 @@
 import logging
 import os
-import sys
 from pathlib import Path
 
 from dotenv import load_dotenv
+from pydantic import SecretStr, ValidationError, field_validator
+from pydantic_settings import BaseSettings, SettingsConfigDict
+
+from .constants import ROOT_PATH
 
 logger = logging.getLogger(__name__)
 
 
-class Config:
-    def __init__(self) -> None:
-        self.ROOT_DIR: Path = Path(__file__).resolve().parents[2]
-        self.LOCALES_DIR: Path = self.ROOT_DIR / "locales"
-        self.DEFAULT_LOCALE: str = "uk"
+def load_env() -> None:
+    # override=False: змінні процесу завжди важливіші за .env.
+    candidates = [
+        Path(os.environ["ENV_FILE"]).resolve() if os.getenv("ENV_FILE") else None,
+        ROOT_PATH / ".env",
+    ]
 
-        load_dotenv(self.ROOT_DIR / ".env", encoding="utf-8")
+    loaded = False
+    for path in candidates:
+        if path is not None and path.is_file():
+            load_dotenv(path, override=False)
+            loaded = True
 
-        self.BOT_TOKEN: str = self._require_env("BOT_TOKEN")
-
-        # Refresh-токен порталу (cookie staffportal_refresh). Портал ротує його при кожному оновленні,
-        # тож актуальний лежить у Redis, а змінна лише запускає перший старт.
-        self.PORTAL_REFRESH_TOKEN: str = self._require_env("PORTAL_REFRESH_TOKEN")
-
-        self.REDIS_URL: str = os.getenv("REDIS_URL", "redis://redis:6379/0")
-
-        # Чат, куди щодня о 6:00 за Києвом надсилається розклад. Не задано — розсилки немає.
-        self.GROUP_ID: int | None = self._optional_int_env("GROUP_ID")
-
-    @staticmethod
-    def _optional_int_env(name: str) -> int | None:
-        value = os.getenv(name)
-        if not value or not value.strip():
-            return None
-        try:
-            return int(value)
-        except ValueError:
-            logger.error("Environment variable %s must be an integer chat id, got %r", name, value)
-            sys.exit(1)
-
-    @staticmethod
-    def _require_env(name: str) -> str:
-        value = os.getenv(name)
-        if value and value.strip():
-            return value
-
-        logger.error("Missing required environment variable: %s", name)
-        sys.exit(1)
+    if not loaded:
+        logger.info("No .env file found; using process environment.")
 
 
-config = Config()
+class Settings(BaseSettings):
+    model_config = SettingsConfigDict(extra="ignore")
+
+    BOT_TOKEN: SecretStr
+    # Портал ротує refresh-токен при кожному оновленні, тож актуальний лежить у Redis,
+    # а змінна лише запускає перший старт.
+    PORTAL_REFRESH_TOKEN: SecretStr
+    REDIS_URL: str = "redis://redis:6379/0"
+    GROUP_ID: int | None = None
+
+    @field_validator("BOT_TOKEN", "PORTAL_REFRESH_TOKEN", mode="before")
+    @classmethod
+    def validate_token(cls, value: object) -> object:
+        if isinstance(value, str):
+            value = value.strip()
+            if not value:
+                raise ValueError("must not be empty")
+        return value
+
+    @field_validator("GROUP_ID", mode="before")
+    @classmethod
+    def normalize_group_id(cls, value: object) -> object:
+        if isinstance(value, str):
+            return value.strip() or None
+        return value
+
+
+def load_settings() -> Settings:
+    load_env()
+    try:
+        # Обов'язкові поля BaseSettings бере з оточення під час запуску — mypy цього не бачить.
+        return Settings()  # type: ignore[call-arg]
+    except ValidationError as exc:
+        for error in exc.errors():
+            field = ".".join(map(str, error["loc"])) or "unknown"
+            logger.error("Invalid configuration for %s: %s", field, error["msg"])
+        raise SystemExit(1) from exc
+
+
+settings = load_settings()

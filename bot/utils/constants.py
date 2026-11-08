@@ -1,5 +1,6 @@
-from typing import Final
+from zoneinfo import ZoneInfo
 
-# Назви днів тижня (показуються користувачу)
-DAYS: Final = ("Понеділок", "Вівторок", "Середа", "Четвер", "П'ятниця", "Субота", "Неділя")
-WORK_DAYS: Final = DAYS[:5]
+# Не покладаємось на TZ системи: поза Docker «сьогодні» теж має рахуватися за Києвом.
+KYIV_TZ: ZoneInfo = ZoneInfo("Europe/Kyiv")
+
+WORK_DAYS_COUNT: int = 5

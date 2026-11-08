@@ -3,8 +3,8 @@ import json
 from redis.exceptions import RedisError
 
 from bot.core import logger
-
-from ..client import PORTAL_REFRESH_TOKEN, redis
+from bot.services.cache.client import redis
+from bot.services.cache.keys import PORTAL_REFRESH_TOKEN_KEY
 
 
 async def load_refresh_token(seed: str) -> str:
@@ -13,7 +13,7 @@ async def load_refresh_token(seed: str) -> str:
     Стан чинний лише для того ж `seed`: якщо токен в оточенні замінили вручну, беремо його.
     """
     try:
-        raw = await redis.get(PORTAL_REFRESH_TOKEN)
+        raw = await redis.get(PORTAL_REFRESH_TOKEN_KEY)
         if raw:
             state = json.loads(raw)
             if state["seed"] == seed:
@@ -25,7 +25,7 @@ async def load_refresh_token(seed: str) -> str:
 
 async def save_refresh_token(seed: str, refresh: str) -> None:
     try:
-        await redis.set(PORTAL_REFRESH_TOKEN, json.dumps({"seed": seed, "refresh": refresh}))
+        await redis.set(PORTAL_REFRESH_TOKEN_KEY, json.dumps({"seed": seed, "refresh": refresh}))
     except RedisError as exc:
         # Сесія жива й у пам'яті; без запису бот лише не переживе рестарт.
         logger.error("Cannot persist portal refresh token: %s", exc)
