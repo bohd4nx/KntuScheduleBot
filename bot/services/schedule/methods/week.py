@@ -7,24 +7,25 @@ from pydantic import ValidationError
 
 from bot.core import logger
 from bot.services import cache
-
-from ..client import get_json
-from ..constants import CACHE_TTL_SECONDS
-from ..exceptions import PortalError
-from ..schemas import Timetable, WeekSchedule
+from bot.services.schedule.client import get_json
+from bot.services.schedule.constants import CACHE_TTL_SECONDS
+from bot.services.schedule.exceptions import PortalError
+from bot.services.schedule.links import attach_links
+from bot.services.schedule.schemas import Timetable, WeekSchedule
 
 # Захист від паралельних однакових запитів до порталу в межах процесу.
 _fetch_lock = asyncio.Lock()
 
 
-def _parse_week(payload: Any) -> WeekSchedule:
+def parse_week(payload: Any) -> WeekSchedule:
     try:
-        return Timetable.model_validate(payload).to_week()
+        week = Timetable.model_validate(payload).to_week()
     except ValidationError as exc:
         raise PortalError(f"Malformed timetable payload: {exc}") from exc
+    return attach_links(week)
 
 
-async def _fetch_week(monday: date) -> Any:
+async def fetch_week(monday: date) -> Any:
     params = {"dateStart": monday.isoformat(), "dateEnd": (monday + timedelta(days=6)).isoformat()}
     return await get_json("student/me/timetable", params=params)
 
@@ -36,17 +37,17 @@ async def get_week(day: date) -> WeekSchedule:
         cached = await cache.schedule.get_week(monday)
         if cached and time.time() - cached.fetched_at < CACHE_TTL_SECONDS:
             try:
-                return _parse_week(cached.payload)
+                return parse_week(cached.payload)
             except PortalError:
                 cached = None  # формат змінився — запис непридатний, беремо з порталу
 
         try:
-            payload = await _fetch_week(monday)
-            week = _parse_week(payload)
+            payload = await fetch_week(monday)
+            week = parse_week(payload)
         except PortalError:
             if cached:
                 logger.warning("Portal unavailable, serving stale schedule for week %s", monday)
-                return _parse_week(cached.payload)
+                return parse_week(cached.payload)
             raise
 
         # Кешуємо лише валідну відповідь; порожній тиждень теж валідний.

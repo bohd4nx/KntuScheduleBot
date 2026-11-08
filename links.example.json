@@ -1,0 +1,9 @@
+{
+  "Інженерія програмного забезпечення": {
+    "lecture": "https://us05web.zoom.us/j/0000000000",
+    "lab": "https://meet.google.com/aaa-bbbb-ccc"
+  },
+  "Філософія": {
+    "default": "https://us05web.zoom.us/j/0000000000"
+  }
+}
